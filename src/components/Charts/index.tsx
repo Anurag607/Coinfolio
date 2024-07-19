@@ -131,7 +131,7 @@ const CoinChart = ({
   return (
     <div
       className={classNames({
-        "w-full h-full relatve flex flex-col items-start justify-start gap-y-8":
+        "w-[99%] h-full relative flex flex-col items-end justify-start gap-y-8":
           true,
         "pl-12": isSidebarOpen,
         "pl-0": !isSidebarOpen,

@@ -1,11 +1,18 @@
-import classNames from "classnames";
+"use client";
+
 import Link from "next/link";
+import classNames from "classnames";
 import { CaretRightFilled } from "@ant-design/icons";
+import { useEffect } from "react";
 
 const heading = "Where Crypto Management Meets Simplicity";
 const subHeading = "Your Comprehensive Tool for Cryptocurrency Management";
 
 const Home = () => {
+  useEffect(() => {
+    localStorage.removeItem("persist:root");
+  }, []);
+
   return (
     <main
       className={
