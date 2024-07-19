@@ -70,6 +70,8 @@ const CoinChart = ({
   });
 
   useEffect(() => {
+    if (typeof selectedCoinData === "undefined") return;
+    if (typeof selectedCoinData.market_data === "undefined") return;
     setFundamentals({
       "Market Cap": selectedCoinData.market_data.market_cap.usd,
       "Fully Diluted Valuation":

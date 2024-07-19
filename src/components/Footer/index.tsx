@@ -20,7 +20,7 @@ const Footer = () => {
       })}
     >
       <div className="flex justify-center items-center gap-4 max-md:mb-2">
-        <Image src="/logo.ico" width={42} height={42} alt="logo" />
+        <Image src="/cf_logo.svg" width={42} height={42} alt="cf_logo" />
         <h3
           className={classNames({
             "font-bold text-lg": true,

@@ -151,13 +151,6 @@ const Table = ({
                       "border-b hover:border-b-2 hover:border-neutral-300":
                         true,
                     })}
-                    onClick={(e) => {
-                      e.preventDefault();
-                      RefereshCoinDetails();
-                      dispatch(updateRecentlyViewed(coin));
-                      dispatch(setSelectedCoin(coin.id));
-                      dispatch(setCurrentSection(1));
-                    }}
                   >
                     <td
                       scope={"col"}
@@ -194,6 +187,29 @@ const Table = ({
                           )}
                         </div>
                       </div>
+                      <button
+                        className={classNames({
+                          "cursor-pointer font-semibold text-xs transition-all mt-1 scale-90":
+                            true,
+                          "px-3 py-1": true,
+                          "bg-neutral-700 text-white": true,
+                          "dark:bg-neutral-300 dark:text-neutral-700": true,
+                          "hover:bg-white hover:text-neutral-700": true,
+                          "dark:hover:bg-neutral-800 dark:hover:text-neutral-200":
+                            true,
+                          "rounded-full border border-neutral-700 dark:border-neutral-300":
+                            true,
+                        })}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          RefereshCoinDetails();
+                          dispatch(updateRecentlyViewed(coin));
+                          dispatch(setSelectedCoin(coin.id));
+                          dispatch(setCurrentSection(1));
+                        }}
+                      >
+                        View More
+                      </button>
                     </td>
                     {type === "primary" && (
                       <td

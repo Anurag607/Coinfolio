@@ -47,10 +47,10 @@ const Navbar = () => {
           className="w-fit h-fit flex justify-center items-center mobile:gap-1 gap-2 relative cursor-pointer"
         >
           <Image
-            src={`/logo.png`}
+            src={`/cf_logo.svg`}
             width={42}
             height={42}
-            alt="logo"
+            alt="cf_logo"
             className={`dark:invert sm:w-[42px] sm:h-[42px] w-[32px] h-[32px] cursor-pointer`}
           />
           <h3

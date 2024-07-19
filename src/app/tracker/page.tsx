@@ -20,6 +20,7 @@ import { ToastConfig } from "@/utils/config";
 import Table from "@/components/shared/Table";
 import {
   setCurrentData,
+  setSelectedCoin,
   setSelectedCoinData,
 } from "@/redux/reducers/coinSlice";
 
@@ -66,19 +67,17 @@ export default function Page() {
                 dispatch(setSelectedCoinData({ ...res, ...data }));
                 setIsFetching(false);
               } else {
-                toast.error("Failed to fetch data (Coin-Details)", ToastConfig);
                 setIsFetching(false);
               }
             })
             .catch((err) => {
               toast.error(
-                `Failed to fetch data (Coin-Details-API-${err})`,
+                `Failed to fetch data (CoinDetail-API-${err})`,
                 ToastConfig
               );
               setIsFetching(false);
             });
         } else {
-          toast.error("Failed to fetch data (Chart-Data)", ToastConfig);
           setIsFetching(false);
         }
       })
@@ -93,20 +92,11 @@ export default function Page() {
     setIsLoading(true);
     CoinFetcher(dispatch)
       .then((res: any) => {
-        if (!res || typeof res === "undefined" || res.length === 0) {
-          toast.error("Failed to fetch data", ToastConfig);
+        dispatch(setSelectedCoin("bitcoin"));
+        dispatch(setCurrentData({ currentDataId: "All Coins", data: res }));
+        CategoryFetcher(dispatch).then((res: any) => {
           setIsLoading(false);
-        } else {
-          dispatch(setCurrentData({ currentDataId: "All Coins", data: res }));
-          try {
-            CategoryFetcher(dispatch).then((res: any) => {
-              setIsLoading(false);
-            });
-          } catch (err) {
-            setIsLoading(false);
-            toast.error("Failed to fetch data", ToastConfig);
-          }
-        }
+        });
       })
       .catch((err) => {
         setIsLoading(false);

@@ -1,12 +1,9 @@
-"use client";
-
-import React from "react";
 import classNames from "classnames";
 import Link from "next/link";
 import { CaretRightFilled } from "@ant-design/icons";
 
-const heading = "Collaborate and Create Together";
-const subHeading = "Streamline Your Team's Writing Process.";
+const heading = "Where Crypto Management Meets Simplicity";
+const subHeading = "Your Comprehensive Tool for Cryptocurrency Management";
 
 const Home = () => {
   return (
@@ -28,13 +25,13 @@ const Home = () => {
         >
           <div
             className={classNames({
-              "mobile-sm:text-2xl text-3xl sm:text-4xl md:text-5xl font-bold text-primary text-center bound tracking-wide":
+              "mobile-sm:text-2xl text-3xl sm:text-4xl md:text-[2.5rem] font-bold text-primary text-center bound tracking-wide":
                 true,
               "mobile-sm:w-[95vw] w-[35rem] sm:w-[40rem] md:w-[45rem] h-fit break-before-avoid":
                 true,
             })}
           >
-            {heading + ". Welcome to CoWrite."}
+            {heading + ". Welcome to CoinFolio."}
           </div>
           <div
             className={classNames({
