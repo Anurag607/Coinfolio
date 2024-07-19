@@ -11,6 +11,11 @@ const coinSlice = createSlice({
     selectedCoinData: [],
     watchlist: [] as any[],
     recentlyViewed: [] as any[],
+    recentlysearched: [] as string[],
+    currentData: {
+      currentDataId: "",
+      data: [],
+    },
   },
   reducers: {
     setCoinData: (state, action) => {
@@ -63,22 +68,40 @@ const coinSlice = createSlice({
       state.selectedCoinData = action.payload;
     },
     updateWatchlist(state, action: PayloadAction<any>) {
-      if (state.watchlist.includes(action.payload)) {
+      // state.watchlist = [];
+      // return;
+      if (state.watchlist.some((coin: any) => coin.id === action.payload.id)) {
         state.watchlist = state.watchlist.filter(
-          (coin: any) => coin !== action.payload
+          (coin: any) => coin.id !== action.payload.id
         );
       } else {
-        state.watchlist.push(action.payload);
+        state.watchlist.unshift(action.payload);
       }
     },
     updateRecentlyViewed(state, action: PayloadAction<any>) {
-      if (state.recentlyViewed.includes(action.payload)) {
-        state.recentlyViewed = state.recentlyViewed.filter(
-          (coin: any) => coin !== action.payload
-        );
-      } else {
-        state.recentlyViewed.push(action.payload);
+      // state.recentlyViewed = [];
+      // return;
+      state.recentlyViewed = state.recentlyViewed.filter(
+        (coin: any) => coin.id !== action.payload.id
+      );
+      state.recentlyViewed.unshift(action.payload);
+      if (state.recentlyViewed.length > 10) {
+        state.recentlyViewed.pop();
       }
+    },
+    updateRecentlySearched(state, action: PayloadAction<string>) {
+      // state.recentlysearched = [];
+      // return;
+      state.recentlysearched = state.recentlysearched.filter(
+        (coin: string) => coin !== action.payload
+      );
+      state.recentlysearched.unshift(action.payload);
+      if (state.recentlysearched.length > 10) {
+        state.recentlysearched.pop();
+      }
+    },
+    setCurrentData: (state, action) => {
+      state.currentData = action.payload;
     },
   },
 });
@@ -95,6 +118,8 @@ export const {
   setSelectedCoinData,
   updateWatchlist,
   updateRecentlyViewed,
+  updateRecentlySearched,
+  setCurrentData,
 } = coinSlice.actions;
 
 export default coinSlice.reducer;

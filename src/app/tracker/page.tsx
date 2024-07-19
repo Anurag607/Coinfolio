@@ -18,7 +18,10 @@ import {
 import { toast } from "react-toastify";
 import { ToastConfig } from "@/utils/config";
 import Table from "@/components/shared/Table";
-import { setSelectedCoinData } from "@/redux/reducers/coinSlice";
+import {
+  setCurrentData,
+  setSelectedCoinData,
+} from "@/redux/reducers/coinSlice";
 
 export default function Page() {
   const dispatch = useAppDispatch();
@@ -26,6 +29,7 @@ export default function Page() {
   const [isFetching, setIsFetching] = useState(false);
   const { currentSection } = useAppSelector((state: any) => state.section);
   const {
+    currentData,
     selectedCoin,
     coinData,
     watchlist,
@@ -35,10 +39,6 @@ export default function Page() {
   } = useAppSelector((state: any) => state.coins);
   const { searchParams } = useAppSelector((state: any) => state.searchBar);
   const { filterValue } = useAppSelector((state: any) => state.filter);
-  const [currentData, setCurrentData] = useState<any>({
-    currentDataId: "All Coins",
-    data: coinData,
-  });
 
   // useEffect(() => {
   //   console.log("Current Data: ", currentData);
@@ -97,7 +97,7 @@ export default function Page() {
           toast.error("Failed to fetch data", ToastConfig);
           setIsLoading(false);
         } else {
-          setCurrentData({ currentDataId: "All Coins", data: res });
+          dispatch(setCurrentData({ currentDataId: "All Coins", data: res }));
           try {
             CategoryFetcher(dispatch).then((res: any) => {
               setIsLoading(false);
@@ -159,7 +159,8 @@ export default function Page() {
             <>
               <div
                 className={classNames({
-                  "flex flex-col items-center justify-start": true,
+                  "relative w-full flex flex-col items-center justify-start":
+                    true,
                   "filter-search-bar:justify-start": true,
                   "ml-10 filter-search-bar:ml-14": true,
                   "mobile:-translate-x-5": true,
@@ -196,11 +197,12 @@ export default function Page() {
                           })}
                           onClick={(e) => {
                             e.preventDefault();
-                            console.log(CoinDataLists);
-                            setCurrentData({
-                              currentDataId: key,
-                              data: CoinDataLists[key],
-                            });
+                            dispatch(
+                              setCurrentData({
+                                currentDataId: key,
+                                data: CoinDataLists[key],
+                              })
+                            );
                           }}
                         >
                           {key}
@@ -210,10 +212,27 @@ export default function Page() {
                   )}
                 </div>
               </div>
-              <Table
-                currentData={currentData.data}
-                RefereshCoinDetails={RefereshCoinDetails}
-              />
+              <div className="w-full relative flex flex-row flex-wrap items-start justify-center gap-4">
+                <div className="w-[60%] h-fit relative flex">
+                  <Table
+                    type={"primary"}
+                    data={currentData.data}
+                    RefereshCoinDetails={RefereshCoinDetails}
+                  />
+                </div>
+                <div className="w-[35%] h-fit flex flex-col items-center justify-center gap-y-4">
+                  <Table
+                    type={"watchlist"}
+                    data={watchlist}
+                    RefereshCoinDetails={RefereshCoinDetails}
+                  />
+                  <Table
+                    type={"recentlyViewed"}
+                    data={recentlyViewed}
+                    RefereshCoinDetails={RefereshCoinDetails}
+                  />
+                </div>
+              </div>
             </>
           ) : (
             <CoinChart

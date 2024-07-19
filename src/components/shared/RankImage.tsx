@@ -4,7 +4,7 @@ const RankImage = ({ imageURL, rank }: { imageURL: string; rank: number }) => {
   return (
     <div
       className={classNames({
-        "relative w-auto": true,
+        "relative w-auto cursor-pointer": true,
         "flex item-center justify-center": true,
         "rounded-full overflow-hidden": true,
         "overflow-hidden": true,
@@ -15,10 +15,9 @@ const RankImage = ({ imageURL, rank }: { imageURL: string; rank: number }) => {
         backgroundImage: `url(${imageURL})`,
       }}
     >
-      {/* <Image src={imageURL} width={45} height={45} alt="coinImage" /> */}
       <div
         className={classNames({
-          "absolute top-0 bottom-0 left-0 right-0": true,
+          "absolute top-0 bottom-0 left-0 right-0 cursor-pointer": true,
           "grid place-items-center": true,
           "md:px-4 md:py-2": rank >= 10 ? false : true,
           "md:px-3 md:py-2": rank < 10 ? false : true,
@@ -28,7 +27,7 @@ const RankImage = ({ imageURL, rank }: { imageURL: string; rank: number }) => {
           "rounded-full overflow-hidden": true,
         })}
       >
-        <h3 className="text-xl text-white font-bold">{rank}</h3>
+        <h3 className="text-xl text-white font-bold cursor-pointer">{rank}</h3>
       </div>
     </div>
   );

@@ -4,6 +4,7 @@ import { setSelectedCoin } from "@/redux/reducers/coinSlice";
 import classNames from "classnames";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { CaretDownFilled, CaretUpFilled } from "@ant-design/icons";
+import { useOnClickOutside } from "usehooks-ts";
 
 const Chart = dynamic(() => import("react-apexcharts"), { ssr: false });
 
@@ -30,7 +31,13 @@ const options = {
   },
   yaxis: {
     labels: {
-      formatter: (val: number) => val.toFixed(2),
+      formatter: (val: number) => {
+        if (val > 1000000000) return (val / 1000000000).toFixed(2) + "B";
+        if (val > 1000000) return (val / 1000000).toFixed(2) + "M";
+        if (val > 1000) return (val / 1000).toFixed(2) + "K";
+
+        return val.toFixed(2);
+      },
     },
   },
 } as any;
@@ -43,7 +50,7 @@ const CoinChart = ({
   isFetching: boolean;
 }) => {
   const dispatch = useAppDispatch();
-  const ref = useRef<HTMLDivElement>(null);
+  const chartRef = useRef<HTMLDivElement>(null);
   const [isCoinOpen, setIsCoinOpen] = useState(false);
   const { isSidebarOpen } = useAppSelector((state: any) => state.sidebar);
   const { selectedCoin, selectedCoinData, backupData } = useAppSelector(
@@ -56,6 +63,10 @@ const CoinChart = ({
   const [chartParameters, setChartParameters] = useState<{
     [key: string]: any;
   }>({});
+
+  useOnClickOutside(chartRef, () => {
+    setIsCoinOpen(false);
+  });
 
   useEffect(() => {
     setFundamentals({
@@ -129,13 +140,13 @@ const CoinChart = ({
     >
       {/* Coin Selector */}
       <div
-        ref={ref}
+        ref={chartRef}
         className={classNames({
           "w-full relative flex items-center justify-center": true,
           "cursor-pointer": true,
         })}
         onClick={() => {
-          !isCoinOpen ? setIsCoinOpen(true) : setIsCoinOpen(false);
+          setIsCoinOpen(!isCoinOpen);
         }}
       >
         <button
@@ -160,7 +171,7 @@ const CoinChart = ({
               true,
             "z-[1000001] bg-neutral-200 divide-y divide-gray-100 rounded-lg shadow dark:bg-neutral-700":
               true,
-            "absolute top-[2.75rem] right-2": true,
+            "absolute top-[2.75rem] right-0": true,
             "shadow-xl transition-all overflow-y-scroll no-scrollbar": true, //animations
             "h-0 py-0": !isCoinOpen,
             "w-full max-h-[15rem]": isCoinOpen,
@@ -211,7 +222,7 @@ const CoinChart = ({
               <button
                 key={index}
                 className={classNames({
-                  "w-fit cursor-pointer": true,
+                  "w-fit cursor-pointer text-xs": true,
                   "hover:scale-105 transition-all": true,
                   "py-[0.25rem] px-[1rem] rounded-full": true,
                   "border-2 border-zinc-200 dark:border-neutral-600": true,
@@ -223,7 +234,7 @@ const CoinChart = ({
                 })}
                 onClick={() => setCurrentParams(key)}
               >
-                <p className="text-xs">{key}</p>
+                {key}
               </button>
             );
           })}

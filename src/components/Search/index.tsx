@@ -1,15 +1,20 @@
 import classNames from "classnames";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { setSearchParams } from "@/redux/reducers/searchSlice";
+import { useOnClickOutside } from "usehooks-ts";
+import { useRef, useState } from "react";
+import { updateRecentlySearched } from "@/redux/reducers/coinSlice";
 
 const Search = () => {
+  const searchRef = useRef(null);
   const dispatch = useAppDispatch();
-  const { searchParams } = useAppSelector((state: any) => state.searchBar);
+  const [search, setSearch] = useState("");
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const { recentlysearched } = useAppSelector((state: any) => state.coins);
 
-  const changleEventHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
-    let searchText = event.currentTarget.value;
-    dispatch(setSearchParams(searchText));
-  };
+  useOnClickOutside(searchRef, () => {
+    setIsSearchOpen(false);
+  });
 
   return (
     <div
@@ -17,10 +22,10 @@ const Search = () => {
         "relative flex items-center justify-center": true,
         "lg:w-fit mr-1": true,
       })}
+      onClick={() => {
+        setIsSearchOpen(!isSearchOpen);
+      }}
     >
-      <label htmlFor="table-search" className="sr-only">
-        Search
-      </label>
       <div className="relative mt-1">
         <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
           <svg
@@ -38,8 +43,10 @@ const Search = () => {
           </svg>
         </div>
         <input
+          ref={searchRef}
           type="text"
           id="table-search"
+          autoComplete="off"
           className={classNames({
             "block p-2 pl-10 w-full min-w-[20rem] bg-white": true, //display, padding, width and bg styling
             "text-sm text-neutral-800 outline-none": true, //text styling
@@ -50,10 +57,69 @@ const Search = () => {
             "dark:placeholder-gray-400 dark:text-white": true, //text (dark) styling
             "cursor-text": true,
           })}
-          placeholder="Search for items"
-          value={searchParams}
-          onChange={changleEventHandler}
+          placeholder="Search for Coins"
+          value={search}
+          onChange={(e) => {
+            let searchText = e.currentTarget.value;
+            setSearch(searchText);
+          }}
         />
+        <button
+          className={classNames({
+            "absolute inset-y-[2px] translate-y-[1px] right-0 grid place-items-center px-3 py-1.5 rounded-md h-fit mr-[3px]":
+              true,
+            "bg-neutral-600 text-white text-sm": true,
+          })}
+          onClick={(e) => {
+            e.preventDefault();
+            dispatch(setSearchParams(search));
+            dispatch(updateRecentlySearched(search));
+          }}
+        >
+          {"Search"}
+        </button>
+        <div
+          className={classNames({
+            "flex flex-col justify-start items-start pr-2.5 overflow-hidden":
+              true,
+            "z-[1000001] bg-neutral-200 divide-y divide-gray-100 rounded-lg shadow dark:bg-neutral-700":
+              true,
+            "absolute top-[2.75rem] right-0": true,
+            "shadow-xl transition-all overflow-y-scroll no-scrollbar": true, //animations
+            "h-0 py-0": !isSearchOpen,
+            "w-full max-h-[15rem]": isSearchOpen,
+          })}
+        >
+          {typeof recentlysearched !== "undefined" &&
+            recentlysearched.map((item: any, index: number) => {
+              return (
+                <li
+                  key={index}
+                  data-value={item}
+                  className={classNames({
+                    "text-neutral-800 hover:bg-neutral-700 hover:text-white":
+                      true, //colors
+                    "dark:text-white dark:hover:bg-neutral-300 dark:hover:text-neutral-800":
+                      true, //colors (dark)
+                    "flex gap-4 items-center w-full": true, //layout
+                    "transition-all duration-300": true, //animation
+                    "rounded-md p-2 mx-2": true, //self style
+                    "cursor-pointer": true,
+                    "py-1": true,
+                    "flex items-center justify-start": true, //layout
+                    "!border-none !outline-none": true,
+                    hidden: !isSearchOpen,
+                  })}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    dispatch(setSearchParams(item));
+                  }}
+                >
+                  {item}
+                </li>
+              );
+            })}
+        </div>
       </div>
     </div>
   );

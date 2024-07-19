@@ -13,13 +13,13 @@ import filterData from "@/scipts/filterScript";
 
 const Filter = () => {
   const dispatch = useAppDispatch();
-  const ref = React.useRef<HTMLDivElement>(null);
+  const filterRef = React.useRef<HTMLDivElement>(null);
   const { isFilterOpen } = useAppSelector((state: any) => state.filter);
   const { coinData, backupData, categoryData } = useAppSelector(
     (state: any) => state.coins
   );
 
-  useOnClickOutside(ref, () => {
+  useOnClickOutside(filterRef, () => {
     dispatch(closeFilter());
   });
 
@@ -31,7 +31,7 @@ const Filter = () => {
 
   return (
     <div
-      ref={ref}
+      ref={filterRef}
       className={classNames({
         "relative flex items-center justify-center": true,
         "cursor-pointer": true,
