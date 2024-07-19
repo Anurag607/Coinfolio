@@ -108,7 +108,7 @@ export default function RootLayout({ children }: { children: any }) {
                       [`relative h-screen ${
                         pathname === "/" ? "w-screen" : "w-[calc(100vw_-_3rem)]"
                       } flex flex-col items-start justify-between`]: true,
-                      "mobile:w-screen": true,
+                      "mobile:w-screen overflow-hidden": true,
                     })}
                   >
                     <Navbar />

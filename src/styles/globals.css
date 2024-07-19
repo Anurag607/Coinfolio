@@ -232,3 +232,11 @@ select {
 .bound {
   font-family: 'Unbounded', cursive;
 }
+
+.apexcharts-zoom-icon.apexcharts-selected svg {
+  fill: #37474f !important;
+}
+
+.apexcharts-pan-icon.apexcharts-selected svg {
+  stroke: #37474f !important;
+}

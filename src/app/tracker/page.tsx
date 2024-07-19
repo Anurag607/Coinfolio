@@ -3,31 +3,47 @@
 import { useState, useEffect } from "react";
 import DashboardPage from "@/Pages/Dashboard";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
-import { CoinChart, FAB, Filter, Pagination, Search } from "@/components";
+import { CoinChart, Filter, Search } from "@/components";
 import classNames from "classnames";
 import Image from "next/image";
-import { setShowBottomBar, setShowSidebar } from "@/redux/reducers/drawerSlice";
 import { closeSidebar, openSidebar } from "@/redux/reducers/sidebarSlice";
-import { clearFilterValue, closeFilter } from "@/redux/reducers/filterSlice";
-import { CaretLeftOutlined, CaretUpOutlined } from "@ant-design/icons";
 import useSwipe from "@/custom-hooks/useSwipe";
-import { clearSearchParams } from "@/redux/reducers/searchSlice";
-import filterData from "@/scripts/filterScript";
-import { CategoryFetcher, CoinFetcher } from "@/scripts/fetchScript";
+import filterData from "@/scipts/filterScript";
+import {
+  CategoryFetcher,
+  CoinChartDataFetcher,
+  CoinDetailFetcher,
+  CoinFetcher,
+} from "@/scipts/fetchScript";
 import { toast } from "react-toastify";
 import { ToastConfig } from "@/utils/config";
-import { setCoinData } from "@/redux/reducers/coinSlice";
 import Table from "@/components/shared/Table";
+import { setSelectedCoinData } from "@/redux/reducers/coinSlice";
 
 export default function Page() {
   const dispatch = useAppDispatch();
   const [isLoading, setIsLoading] = useState(false);
+  const [isFetching, setIsFetching] = useState(false);
   const { currentSection } = useAppSelector((state: any) => state.section);
-  const { coinData, backupData, categoryData } = useAppSelector(
-    (state: any) => state.coins
-  );
+  const {
+    selectedCoin,
+    coinData,
+    watchlist,
+    recentlyViewed,
+    backupData,
+    categoryData,
+  } = useAppSelector((state: any) => state.coins);
   const { searchParams } = useAppSelector((state: any) => state.searchBar);
   const { filterValue } = useAppSelector((state: any) => state.filter);
+  const [currentData, setCurrentData] = useState<any>({
+    currentDataId: "All Coins",
+    data: coinData,
+  });
+
+  // useEffect(() => {
+  //   console.log("Current Data: ", currentData);
+  //   console.log("Category Data: ", categoryData);
+  // }, [currentData, categoryData]);
 
   const swipeHandlers = useSwipe({
     onSwipedLeft: () => {
@@ -38,41 +54,57 @@ export default function Page() {
     },
   });
 
-  const cleanup = () => {
-    dispatch(closeSidebar());
-    dispatch(closeFilter());
-    dispatch(setShowSidebar([false, ""]));
-    dispatch(setShowBottomBar([false, ""]));
-    dispatch(clearSearchParams());
-    dispatch(clearFilterValue());
-    console.clear();
+  const RefereshCoinDetails = () => {
+    if (process.env.NEXT_PUBLIC_STATIC_API === "true") return;
+    setIsFetching(true);
+    CoinChartDataFetcher(selectedCoin)
+      .then((res) => {
+        if (res.hasOwnProperty("prices")) {
+          CoinDetailFetcher(selectedCoin)
+            .then((data) => {
+              if (data.hasOwnProperty("id")) {
+                dispatch(setSelectedCoinData({ ...res, ...data }));
+                setIsFetching(false);
+              } else {
+                toast.error("Failed to fetch data (Coin-Details)", ToastConfig);
+                setIsFetching(false);
+              }
+            })
+            .catch((err) => {
+              toast.error(
+                `Failed to fetch data (Coin-Details-API-${err})`,
+                ToastConfig
+              );
+              setIsFetching(false);
+            });
+        } else {
+          toast.error("Failed to fetch data (Chart-Data)", ToastConfig);
+          setIsFetching(false);
+        }
+      })
+      .catch((err) => {
+        toast.error(`Failed to fetch data (Chart-API-${err})`, ToastConfig);
+        setIsFetching(false);
+      });
   };
 
   const getCoinData = async () => {
-    if (coinData.length > 0) return;
+    if (process.env.NEXT_PUBLIC_STATIC_API === "true") return;
     setIsLoading(true);
     CoinFetcher(dispatch)
       .then((res: any) => {
-        if (!res || typeof res === "undefined") {
-          toast.error("Failed to fetch data", ToastConfig);
-          setIsLoading(false);
-        } else if (res.length === 0) {
+        if (!res || typeof res === "undefined" || res.length === 0) {
           toast.error("Failed to fetch data", ToastConfig);
           setIsLoading(false);
         } else {
-          dispatch(setCoinData(backupData));
-          if (categoryData.length === 0) {
-            try {
-              CategoryFetcher(dispatch).then((res: any) => {
-                console.log("Categories: ", res);
-                setIsLoading(false);
-              });
-            } catch (err) {
+          setCurrentData({ currentDataId: "All Coins", data: res });
+          try {
+            CategoryFetcher(dispatch).then((res: any) => {
               setIsLoading(false);
-              toast.error("Failed to fetch data", ToastConfig);
-            }
-          } else {
+            });
+          } catch (err) {
             setIsLoading(false);
+            toast.error("Failed to fetch data", ToastConfig);
           }
         }
       })
@@ -102,7 +134,13 @@ export default function Page() {
     );
   }, [filterValue, searchParams]);
 
-  if (isLoading) {
+  const CoinDataLists: { [key: string]: any } = {
+    "All Coins": coinData,
+    "Watch List": watchlist,
+    "Recently Viewed": recentlyViewed,
+  };
+
+  if (isLoading || isFetching) {
     return (
       <div className="fixed top-0 left-0 flex flex-col gap-4 items-center justify-center h-screen w-screen bg-zinc-800 bg-opacity-80 z-[100000] overflow-hidden">
         <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-main" />
@@ -121,57 +159,70 @@ export default function Page() {
             <>
               <div
                 className={classNames({
-                  "h-[8vh] w-full ml-10 z-[10000] relative": true,
-                  "flex items-center justify-start": true,
+                  "flex flex-col items-center justify-start": true,
                   "filter-search-bar:justify-start": true,
-                  "filter-search-bar:ml-14": true,
+                  "ml-10 filter-search-bar:ml-14": true,
                   "mobile:-translate-x-5": true,
                 })}
               >
-                <Search />
-                <div className="h-full w-[0.5rem]" />
-                <Filter />
+                <div
+                  className={classNames({
+                    "h-fit mb-8 w-full z-[10000] relative": true,
+                    "flex items-center justify-start": true,
+                    "filter-search-bar:ml-14": true,
+                  })}
+                >
+                  <Search />
+                  <div className="h-full w-[0.5rem]" />
+                  <Filter />
+                </div>
+                <div className="w-full flex items-center justify-start gap-x-4">
+                  {Object.keys(CoinDataLists).map(
+                    (key: string, index: number) => {
+                      return (
+                        <button
+                          key={index}
+                          className={classNames({
+                            "w-fit text-xs cursor-pointer": true,
+                            "hover:scale-105 transition-all": true,
+                            "py-[0.25rem] px-[1rem] rounded-full": true,
+                            "border-2 border-zinc-200 dark:border-neutral-600":
+                              true,
+                            "flex items-center justify-between": true,
+                            "bg-white text-neutral-700 dark:bg-neutral-700 dark:text-white":
+                              currentData.currentDataId !== key,
+                            "bg-neutral-700 text-white dark:text-neutral-700 dark:bg-neutral-200":
+                              currentData.currentDataId === key,
+                          })}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            console.log(CoinDataLists);
+                            setCurrentData({
+                              currentDataId: key,
+                              data: CoinDataLists[key],
+                            });
+                          }}
+                        >
+                          {key}
+                        </button>
+                      );
+                    }
+                  )}
+                </div>
               </div>
-              <Table />
-              <FAB />
+              <Table
+                currentData={currentData.data}
+                RefereshCoinDetails={RefereshCoinDetails}
+              />
             </>
           ) : (
-            <CoinChart />
+            <CoinChart
+              RefereshCoinDetails={RefereshCoinDetails}
+              isFetching={isFetching}
+            />
           )}
         </DashboardPage>
       )}
-      {/* <div
-        onClick={() => {
-          dispatch(setShowBottomBar([true, ""]));
-          dispatch(setShowSidebar([true, ""]));
-        }}
-        className={classNames({
-          "mobile:w-[32px] mobile:h-[32px] w-[42px] h-[42px] mobile:hidden flex items-center justify-center":
-            true,
-          [`bg-primary text-main mobile:text-[0.95rem] text-3xl rounded-l-lg`]:
-            true,
-          "z-[100001] transition-all": true,
-          "fixed right-0 top-[20%]": true,
-        })}
-      >
-        <CaretLeftOutlined />
-      </div>
-      <div
-        onClick={() => {
-          dispatch(setShowBottomBar([true, ""]));
-          dispatch(setShowSidebar([true, ""]));
-        }}
-        className={classNames({
-          "mobile:w-[32px] mobile:h-[32px] w-[42px] h-[42px] hidden mobile:flex items-center justify-center":
-            true,
-          [`bg-primary text-main mobile:text-[0.95rem] text-xl rounded-t-lg`]:
-            true,
-          "z-[100001] transition-all": true,
-          "fixed bottom-0 left-[15%]": true,
-        })}
-      >
-        <CaretUpOutlined />
-      </div> */}
     </main>
   );
 }

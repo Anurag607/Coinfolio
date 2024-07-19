@@ -1,20 +1,28 @@
 import { useEffect } from "react";
 import classNames from "classnames";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
-import { setCoinData } from "@/redux/reducers/coinSlice";
+import { setCoinData, setSelectedCoin } from "@/redux/reducers/coinSlice";
 import SortArrows from "./SortArrows";
 import RankImage from "./RankImage";
-import sortData from "@/scripts/sortingScript";
+import sortData from "@/scipts/sortingScript";
+import { setCurrentSection } from "@/redux/reducers/sectionSlice";
 
-const Table = () => {
+const Table = ({
+  currentData,
+  RefereshCoinDetails,
+}: {
+  currentData: any[];
+  RefereshCoinDetails: any;
+}) => {
   const dispatch = useAppDispatch();
   const { searchParams } = useAppSelector((state: any) => state.searchBar);
   const { isSidebarOpen } = useAppSelector((state: any) => state.sidebar);
-  const { coinData, backupData, sort_market_cap, sort_current_price } =
-    useAppSelector((state: any) => state.coins);
+  const { backupData, sort_market_cap, sort_current_price } = useAppSelector(
+    (state: any) => state.coins
+  );
 
   useEffect(() => {
-    let filteredData = coinData.filter((coin: any) => {
+    let filteredData = currentData.filter((coin: any) => {
       return coin.name.toLowerCase().includes(searchParams.toLowerCase());
     });
     if (searchParams === "") filteredData = backupData;
@@ -57,7 +65,7 @@ const Table = () => {
                   className="cursor-pointer"
                   onClick={() => {
                     let sortedData = sortData(
-                      coinData,
+                      currentData,
                       sort_current_price,
                       "current_price",
                       dispatch
@@ -76,7 +84,7 @@ const Table = () => {
                   className="cursor-pointer"
                   onClick={() => {
                     let sortedData = sortData(
-                      coinData,
+                      currentData,
                       sort_market_cap,
                       "market_cap",
                       dispatch
@@ -91,7 +99,7 @@ const Table = () => {
           </tr>
         </thead>
         <tbody>
-          {coinData.map((coin: any, i: number) => {
+          {currentData.map((coin: any, i: number) => {
             return (
               <tr
                 key={i}
@@ -102,7 +110,13 @@ const Table = () => {
                 </td>
                 <th
                   scope="row"
-                  className="pl-6 py-4 font-medium text-neutral-900 dark:text-white whitespace-nowrap w-[45%]"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    RefereshCoinDetails();
+                    dispatch(setSelectedCoin(coin.id));
+                    dispatch(setCurrentSection(1));
+                  }}
+                  className="pl-6 py-4 font-medium text-neutral-900 dark:text-white whitespace-nowrap w-[45%] cursor-pointer"
                 >
                   {coin.name} ({coin.symbol})
                 </th>

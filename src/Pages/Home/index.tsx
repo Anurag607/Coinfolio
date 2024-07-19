@@ -5,7 +5,7 @@ import { setCoinData } from "@/redux/reducers/coinSlice";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import classNames from "classnames";
 import { Search } from "@/components";
-import { CategoryFetcher } from "@/scripts/fetchScript";
+import { CategoryFetcher } from "@/scipts/fetchScript";
 import { Filter } from "@/components";
 
 const HomePage: NextPage<{ ranklist: any }> = ({ ranklist }) => {

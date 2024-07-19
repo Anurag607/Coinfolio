@@ -1,5 +1,4 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-
 const coinSlice = createSlice({
   name: "coins",
   initialState: {
@@ -9,7 +8,9 @@ const coinSlice = createSlice({
     sort_market_cap: "desc",
     sort_current_price: "asc",
     selectedCoin: "bitcoin",
-    marketData: [],
+    selectedCoinData: [],
+    watchlist: [] as any[],
+    recentlyViewed: [] as any[],
   },
   reducers: {
     setCoinData: (state, action) => {
@@ -58,8 +59,26 @@ const coinSlice = createSlice({
     setSelectedCoin(state, action: PayloadAction<string>) {
       state.selectedCoin = action.payload;
     },
-    setMarketData(state, action: PayloadAction<any>) {
-      state.marketData = action.payload;
+    setSelectedCoinData(state, action: PayloadAction<any>) {
+      state.selectedCoinData = action.payload;
+    },
+    updateWatchlist(state, action: PayloadAction<any>) {
+      if (state.watchlist.includes(action.payload)) {
+        state.watchlist = state.watchlist.filter(
+          (coin: any) => coin !== action.payload
+        );
+      } else {
+        state.watchlist.push(action.payload);
+      }
+    },
+    updateRecentlyViewed(state, action: PayloadAction<any>) {
+      if (state.recentlyViewed.includes(action.payload)) {
+        state.recentlyViewed = state.recentlyViewed.filter(
+          (coin: any) => coin !== action.payload
+        );
+      } else {
+        state.recentlyViewed.push(action.payload);
+      }
     },
   },
 });
@@ -73,7 +92,9 @@ export const {
   setSortingDirCP,
   setSortingDirMC,
   setSelectedCoin,
-  setMarketData,
+  setSelectedCoinData,
+  updateWatchlist,
+  updateRecentlyViewed,
 } = coinSlice.actions;
 
 export default coinSlice.reducer;

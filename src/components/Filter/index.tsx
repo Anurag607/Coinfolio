@@ -9,7 +9,7 @@ import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { useOnClickOutside } from "usehooks-ts";
 import { setCoinData } from "@/redux/reducers/coinSlice";
 import { FilterOutlined } from "@ant-design/icons";
-import filterData from "@/scripts/filterScript";
+import filterData from "@/scipts/filterScript";
 
 const Filter = () => {
   const dispatch = useAppDispatch();
@@ -57,10 +57,10 @@ const Filter = () => {
             true,
           "z-[1000001] bg-neutral-200 divide-y divide-gray-100 rounded-lg shadow dark:bg-neutral-700":
             true,
-          "absolute top-[2.75rem] right-2": true,
+          "absolute top-0 left-[105%]": true,
           "shadow-xl transition-all overflow-y-scroll no-scrollbar": true, //animations
-          "w-0 py-0": !isFilterOpen,
-          "max-h-[20rem]": isFilterOpen,
+          "h-0 py-0": !isFilterOpen,
+          "h-[15rem]": isFilterOpen,
         })}
       >
         <li
@@ -72,7 +72,6 @@ const Filter = () => {
             "cursor-pointer": true,
             "py-1 my-1": true,
             "flex items-center justify-start": true, //layout
-            hidden: !isFilterOpen,
           })}
           onClick={() => {
             dispatch(setFilterValue(""));
@@ -98,7 +97,6 @@ const Filter = () => {
                 "py-1": true,
                 "flex items-center justify-start": true, //layout
                 "!border-none !outline-none": true,
-                hidden: !isFilterOpen,
               })}
               onClick={ClickEventHandler}
             >
