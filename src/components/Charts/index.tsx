@@ -216,12 +216,12 @@ const CoinChart = ({
       </div>
       {/* Chart */}
       <div className="flex flex-col items-center justify-center gap-y-4 relative w-full dark:bg-neutral-800 rounded-md dark:!text-white py-4">
-        <div className="w-full dark:bg-neutral-800 rounded-md dark:!text-white">
+        <div className="w-full pt-5 dark:bg-neutral-800 rounded-md dark:!text-white">
           <Chart
             options={options}
             series={series}
             type="area"
-            width={"100%"}
+            width={"99%"}
             height={400}
             curve={"smooth"}
           />

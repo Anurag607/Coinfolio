@@ -10,7 +10,7 @@ import {
 } from "@/redux/reducers/coinSlice";
 import SortArrows from "./SortArrows";
 import RankImage from "./RankImage";
-import sortData from "@/scipts/sortingScript";
+import sortData from "@/scripts/sortingScript";
 import { setCurrentSection } from "@/redux/reducers/sectionSlice";
 import Image from "next/image";
 
@@ -107,7 +107,12 @@ const Table = ({
                       "current_price",
                       dispatch
                     );
-                    dispatch(setCoinData(sortedData));
+                    dispatch(
+                      setCurrentData({
+                        currentDataId: currentData.currentDataId,
+                        data: sortedData,
+                      })
+                    );
                   }}
                 >
                   <SortArrows />
@@ -126,7 +131,12 @@ const Table = ({
                       "market_cap",
                       dispatch
                     );
-                    dispatch(setCoinData(sortedData));
+                    dispatch(
+                      setCurrentData({
+                        currentDataId: currentData.currentDataId,
+                        data: sortedData,
+                      })
+                    );
                   }}
                 >
                   <SortArrows />
@@ -206,7 +216,7 @@ const Table = ({
                           RefereshCoinDetails();
                           dispatch(updateRecentlyViewed(coin));
                           dispatch(setSelectedCoin(coin.id));
-                          dispatch(setCurrentSection(1));
+                          dispatch(setCurrentSection(2));
                         }}
                       >
                         View More
@@ -257,7 +267,7 @@ const Table = ({
               <div className="relative flex flex-col justify-center items-center gap-2 mobile:gap-1">
                 <h4 className="rubik text-primary font-bold text-xl text-center">
                   {type === "primary"
-                    ? "No Data Found"
+                    ? "No Data Found!..."
                     : type === "watchlist"
                     ? "Your Watchlist is Empty!"
                     : "You haven't viewed any coins yet!"}

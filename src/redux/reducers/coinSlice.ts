@@ -16,6 +16,10 @@ const coinSlice = createSlice({
       currentDataId: "",
       data: [],
     },
+    holdingData: [] as any[],
+    sort_holding: "desc",
+    sort_holding_usd: "desc",
+    globalData: {},
   },
   reducers: {
     setCoinData: (state, action) => {
@@ -103,6 +107,18 @@ const coinSlice = createSlice({
     setCurrentData: (state, action) => {
       state.currentData = action.payload;
     },
+    setHoldingData: (state, action) => {
+      state.holdingData = action.payload;
+    },
+    setSortingDirHolding: (state, action) => {
+      state.sort_holding = action.payload;
+    },
+    setSortingDirHoldingUSD: (state, action) => {
+      state.sort_holding_usd = action.payload;
+    },
+    setGlobalData: (state, action) => {
+      state.globalData = action.payload;
+    },
   },
 });
 
@@ -120,6 +136,10 @@ export const {
   updateRecentlyViewed,
   updateRecentlySearched,
   setCurrentData,
+  setHoldingData,
+  setSortingDirHolding,
+  setSortingDirHoldingUSD,
+  setGlobalData,
 } = coinSlice.actions;
 
 export default coinSlice.reducer;

@@ -48,15 +48,26 @@ export const CoinChartDataFetcher = async (coin: string) => {
 export const CoinDetailFetcher = async (coin: string) => {
   const response = await fetch(
     `https://api.coingecko.com/api/v3/coins/${coin}`,
-    {
-      method: "GET",
-      headers: {
-        Content: "application/json",
-        accept: "application/json",
-        "Access-Control-Allow-Origin": "*",
-      },
-    }
+    options
   );
   const data = await response.json();
   return data;
+};
+
+export const CompanyFetcher = async (coin: string) => {
+  const response = await fetch(
+    `https://api.coingecko.com/api/v3/companies/public_treasury/${coin}`,
+    options
+  );
+  const data = await response.json();
+  return data.companies;
+};
+
+export const GlobalDataFetcher = async () => {
+  const response = await fetch(
+    `https://api.coingecko.com/api/v3/global`,
+    options
+  );
+  const data = await response.json();
+  return data.data;
 };

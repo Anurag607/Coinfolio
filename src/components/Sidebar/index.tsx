@@ -14,6 +14,7 @@ import {
   CaretRightOutlined,
   DoubleRightOutlined,
   OrderedListOutlined,
+  HomeOutlined,
 } from "@ant-design/icons";
 import { setCurrentSection } from "@/redux/reducers/sectionSlice";
 
@@ -65,7 +66,6 @@ const Sidebar = () => {
       >
         {isSidebarOpen ? <CaretLeftOutlined /> : <CaretRightOutlined />}
       </div>
-      {/* Expand Switch */}
       <div
         className={classNames({
           "flex items-center justify-center gap-x-4 flex-row-reverse": true,
@@ -75,29 +75,7 @@ const Sidebar = () => {
           "transition-all ease-in-out": true,
         })}
       >
-        {/* Expand Sidebar */}
-        <div
-          onClick={(e) => {
-            e.preventDefault();
-            if (expanded) dispatch(collapseSidebar());
-            else dispatch(expandSidebar());
-          }}
-          className={classNames({
-            "!bg-white !text-neutral-700": expanded,
-            [`mobile:w-[30px] mobile:h-[30px] w-[42px] h-[42px] flex items-center justify-center ${
-              !expanded && "mobile:mt-1 mt-1"
-            }`]: true,
-            "bg-transparent border font-bold border-[#F7F6F3] text-[#F7F6F3] rounded-lg left-3":
-              true,
-            [`mobile:text-[0.95rem] text-3xl rounded-r-lg cursor-pointer ${
-              !expanded ? "rotate-90" : "-rotate-90"
-            }`]: true,
-            "transition-all hover:scale-105": true,
-          })}
-        >
-          <DoubleRightOutlined />
-        </div>
-        {/* Coin List */}
+        {/* Home */}
         <div
           onClick={(e) => {
             e.preventDefault();
@@ -115,9 +93,9 @@ const Sidebar = () => {
             "transition-all hover:scale-105": true,
           })}
         >
-          <OrderedListOutlined />
+          <HomeOutlined />
         </div>
-        {/* Coin Chart */}
+        {/* Coin List */}
         <div
           onClick={(e) => {
             e.preventDefault();
@@ -125,6 +103,26 @@ const Sidebar = () => {
           }}
           className={classNames({
             "!bg-white !text-neutral-700": currentSection === 1,
+            [`mobile:w-[30px] mobile:h-[30px] w-[42px] h-[42px] flex items-center justify-center ${
+              !expanded && "mobile:mt-1 mt-1"
+            }`]: true,
+            "bg-transparent border font-bold border-[#F7F6F3] text-[#F7F6F3] rounded-lg left-3":
+              true,
+            [`mobile:text-[0.95rem] text-3xl rounded-r-lg cursor-pointer rotate-90`]:
+              true,
+            "transition-all hover:scale-105": true,
+          })}
+        >
+          <OrderedListOutlined />
+        </div>
+        {/* Coin Chart */}
+        <div
+          onClick={(e) => {
+            e.preventDefault();
+            dispatch(setCurrentSection(2));
+          }}
+          className={classNames({
+            "!bg-white !text-neutral-700": currentSection === 2,
             [`mobile:w-[30px] mobile:h-[30px] w-[42px] h-[42px] flex items-center justify-center ${
               !expanded && "mobile:mt-1 mt-1"
             }`]: true,

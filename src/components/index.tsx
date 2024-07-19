@@ -12,6 +12,7 @@ import Search from "./Search";
 import Filter from "./Filter";
 import LoadingSpinner from "./LoadingSpinner";
 import CoinChart from "./Charts";
+import Home from "./Home";
 
 export {
   ErrorBoundaryWrapper,
@@ -25,4 +26,5 @@ export {
   Filter,
   LoadingSpinner,
   CoinChart,
+  Home,
 };

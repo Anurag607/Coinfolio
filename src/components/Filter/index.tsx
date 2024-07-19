@@ -9,7 +9,7 @@ import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { useOnClickOutside } from "usehooks-ts";
 import { setCoinData } from "@/redux/reducers/coinSlice";
 import { FilterOutlined } from "@ant-design/icons";
-import filterData from "@/scipts/filterScript";
+import filterData from "@/scripts/filterScript";
 
 const Filter = () => {
   const dispatch = useAppDispatch();

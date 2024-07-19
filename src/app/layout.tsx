@@ -20,6 +20,8 @@ import { CaretUpOutlined } from "@ant-design/icons";
 import useScrollTrigger from "@/custom-hooks/useScrollTrigger";
 import classNames from "classnames";
 import { usePathname } from "next/navigation";
+import { DndProvider } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
 
 const rubik = Rubik({ subsets: ["latin"] });
 
@@ -96,25 +98,29 @@ export default function RootLayout({ children }: { children: any }) {
             <QueryClientProvider client={queryClient}>
               <ScrollToTop _children={null} />
               <ErrorBoundaryWrapper>
-                <div
-                  className={classNames({
-                    "relative max-w-screen max-h-screen gap-x-0": true,
-                    "flex flex-row items-start justify-end": true,
-                  })}
-                >
+                <DndProvider backend={HTML5Backend}>
                   <div
                     className={classNames({
-                      [`relative h-screen ${
-                        pathname === "/" ? "w-screen" : "w-[calc(100vw_-_3rem)]"
-                      } flex flex-col items-start justify-between`]: true,
-                      "mobile:w-screen overflow-hidden": true,
+                      "relative max-w-screen max-h-screen gap-x-0": true,
+                      "flex flex-row items-start justify-end": true,
                     })}
                   >
-                    <Navbar />
-                    {children}
-                    <div className={"w-full h-[2rem] bg-transparent"} />
+                    <div
+                      className={classNames({
+                        [`relative h-screen ${
+                          pathname === "/"
+                            ? "w-screen"
+                            : "w-[calc(100vw_-_3rem)]"
+                        } flex flex-col items-start justify-between`]: true,
+                        "mobile:w-screen overflow-hidden": true,
+                      })}
+                    >
+                      <Navbar />
+                      {children}
+                      <div className={"w-full h-[2rem] bg-transparent"} />
+                    </div>
                   </div>
-                </div>
+                </DndProvider>
               </ErrorBoundaryWrapper>
               <ScrollTop>
                 <div className="z-[100000001] w-10 h-10 aspect-square rounded-full bg-primary text-white grid place-items-center cursor-pointer">

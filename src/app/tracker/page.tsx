@@ -3,23 +3,27 @@
 import { useState, useEffect } from "react";
 import DashboardPage from "@/Pages/Dashboard";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
-import { CoinChart, Filter, Search } from "@/components";
+import { CoinChart, Filter, Home, Search } from "@/components";
 import classNames from "classnames";
 import Image from "next/image";
 import { closeSidebar, openSidebar } from "@/redux/reducers/sidebarSlice";
 import useSwipe from "@/custom-hooks/useSwipe";
-import filterData from "@/scipts/filterScript";
+import filterData from "@/scripts/filterScript";
 import {
   CategoryFetcher,
   CoinChartDataFetcher,
   CoinDetailFetcher,
   CoinFetcher,
-} from "@/scipts/fetchScript";
+  CompanyFetcher,
+  GlobalDataFetcher,
+} from "@/scripts/fetchScript";
 import { toast } from "react-toastify";
 import { ToastConfig } from "@/utils/config";
 import Table from "@/components/shared/Table";
 import {
   setCurrentData,
+  setGlobalData,
+  setHoldingData,
   setSelectedCoin,
   setSelectedCoinData,
 } from "@/redux/reducers/coinSlice";
@@ -96,7 +100,13 @@ export default function Page() {
         dispatch(setSelectedCoin("bitcoin"));
         dispatch(setCurrentData({ currentDataId: "All Coins", data: res }));
         CategoryFetcher(dispatch).then((res: any) => {
-          setIsLoading(false);
+          CompanyFetcher("bitcoin").then((res) => {
+            dispatch(setHoldingData(res));
+            GlobalDataFetcher().then((res) => {
+              dispatch(setGlobalData(res));
+              setIsLoading(false);
+            });
+          });
         });
       })
       .catch((err) => {
@@ -136,8 +146,8 @@ export default function Page() {
   if (isLoading || isFetching) {
     return (
       <div className="fixed top-0 left-0 flex flex-col gap-4 items-center justify-center h-screen w-screen bg-zinc-800 bg-opacity-80 z-[100000] overflow-hidden">
-        <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-main" />
-        <h4 className="text-main font-bold text-2xl mobile:w-[15rem] text-center">{`Getting Latest Crypto Currency Data...`}</h4>
+        <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-primary" />
+        <h4 className="text-primary font-bold text-2xl mobile:w-[15rem] text-center">{`Getting Latest Crypto Currency Data...`}</h4>
       </div>
     );
   }
@@ -149,6 +159,8 @@ export default function Page() {
       ) : (
         <DashboardPage>
           {currentSection === 0 ? (
+            <Home />
+          ) : currentSection === 1 ? (
             <>
               <div
                 className={classNames({
