@@ -1,7 +1,7 @@
 import { useCallback } from "react";
 import { useDrag } from "react-dnd";
 
-const DraggableCoin = ({ coin, children }: any) => {
+const DraggableCoin = ({ coin, children, className }: any) => {
   const [{ isDragging }, drag] = useDrag(() => ({
     type: "COIN",
     item: { coin },
@@ -18,7 +18,11 @@ const DraggableCoin = ({ coin, children }: any) => {
   );
 
   return (
-    <tr ref={ref} style={{ opacity: isDragging ? 0.5 : 1 }}>
+    <tr
+      ref={ref}
+      className={className}
+      style={{ opacity: isDragging ? 0.5 : 1 }}
+    >
       {children}
     </tr>
   );

@@ -3,7 +3,7 @@ import { useDrop } from "react-dnd";
 import { useAppDispatch } from "@/redux/hooks";
 import { updateWatchlist } from "@/redux/reducers/coinSlice";
 
-const DroppableTable = ({ children, type }: any) => {
+const DroppableTable = ({ children, type, className }: any) => {
   const dispatch = useAppDispatch();
 
   const [{ isOver }, drop] = useDrop(() => ({
@@ -28,6 +28,7 @@ const DroppableTable = ({ children, type }: any) => {
   return (
     <tbody
       ref={ref}
+      className={className}
       style={{ backgroundColor: isOver ? "#e0e0e0" : "transparent" }}
     >
       {children}

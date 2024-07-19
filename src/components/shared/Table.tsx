@@ -13,6 +13,8 @@ import RankImage from "./RankImage";
 import sortData from "@/scripts/sortingScript";
 import { setCurrentSection } from "@/redux/reducers/sectionSlice";
 import Image from "next/image";
+import DraggableCoin from "./DraggableCoin";
+import DroppableTable from "./DroppableTable";
 
 function formatCurrency(value: number) {
   return new Intl.NumberFormat("en-US", {
@@ -145,7 +147,7 @@ const Table = ({
             </th>
           </tr>
         </thead>
-        <tbody className="w-full h-full relative">
+        <DroppableTable className="w-full h-full relative" type={type}>
           {data.length > 0 ? (
             <>
               {data.map((coin: any, i: number) => {
@@ -153,8 +155,9 @@ const Table = ({
                   (watchedCoin: any) => watchedCoin.id === coin.id
                 );
                 return (
-                  <tr
+                  <DraggableCoin
                     key={i}
+                    coin={coin}
                     className={classNames({
                       "w-full relative h-fit": true,
                       "cursor-pointer group  dark:bg-neutral-800 dark:border-neutral-700":
@@ -247,7 +250,7 @@ const Table = ({
                     >
                       ${formatCurrency(coin.market_cap)}
                     </td>
-                  </tr>
+                  </DraggableCoin>
                 );
               })}
             </>
@@ -275,7 +278,7 @@ const Table = ({
               </div>
             </div>
           )}
-        </tbody>
+        </DroppableTable>
       </table>
     </div>
   );
