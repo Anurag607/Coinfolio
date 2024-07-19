@@ -5,6 +5,7 @@ import classNames from "classnames";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { CaretDownFilled, CaretUpFilled } from "@ant-design/icons";
 import { useOnClickOutside } from "usehooks-ts";
+import Image from "next/image";
 
 const Chart = dynamic(() => import("react-apexcharts"), { ssr: false });
 
@@ -112,6 +113,7 @@ const CoinChart = ({
 
   useEffect(() => {
     RefereshCoinDetails();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedCoin]);
 
   const series = [
@@ -160,7 +162,13 @@ const CoinChart = ({
         >
           <p>{selectedCoin}</p>
           {isFetching ? (
-            <img className="h-6" src="https://i.gifer.com/VAyR.gif" />
+            <Image
+              width={24}
+              height={24}
+              alt={"Loading..."}
+              className="h-6"
+              src="https://i.gifer.com/VAyR.gif"
+            />
           ) : (
             <CaretDownFilled className="text-neutral-500 dark:text-white mr-2" />
           )}

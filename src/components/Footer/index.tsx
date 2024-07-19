@@ -5,6 +5,7 @@ import {
   FacebookOutlined,
 } from "@ant-design/icons";
 import Link from "next/link";
+import Image from "next/image";
 
 const Footer = () => {
   return (
@@ -19,14 +20,14 @@ const Footer = () => {
       })}
     >
       <div className="flex justify-center items-center gap-4 max-md:mb-2">
-        <img src="/logo.ico" width={42} height={42} alt="logo" />
+        <Image src="/logo.ico" width={42} height={42} alt="logo" />
         <h3
           className={classNames({
             "font-bold text-lg": true,
             "flex justify-center items-center gap-4": true,
           })}
         >
-          CoWrite
+          CoinFolio
         </h3>
       </div>
       <div className="flex justify-center items-center gap-4 ">

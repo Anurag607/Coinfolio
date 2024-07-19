@@ -1,6 +1,7 @@
 import React from "react";
 import styles from "./DarkMode.module.css";
 import classNames from "classnames";
+import Image from "next/image";
 
 let prefersDark = false;
 
@@ -51,7 +52,9 @@ const DarkMode = () => {
         toggleTheme(event);
       }}
     >
-      <img
+      <Image
+        width={28}
+        height={28}
         src={`${theme === "light" ? "/dark-mode.png" : "/moon.png"}`}
         alt={"switch"}
         className={classNames({

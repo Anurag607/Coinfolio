@@ -116,6 +116,7 @@ export default function Page() {
 
   useEffect(() => {
     getCoinData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -132,6 +133,7 @@ export default function Page() {
       filterValue,
       dispatch
     );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filterValue, searchParams]);
 
   const CoinDataLists: { [key: string]: any } = {

@@ -10,7 +10,6 @@ import {
   Navbar,
   ScrollToTop,
   Sidebar,
-  OffCanvasPopup,
   LoadingSpinner,
 } from "@/components";
 import { Suspense } from "react";
@@ -122,14 +121,7 @@ export default function RootLayout({ children }: { children: any }) {
                   <CaretUpOutlined />
                 </div>
               </ScrollTop>
-              {pathname !== "/" ? (
-                <>
-                  {/* <OffCanvasPopup /> */}
-                  <Sidebar />
-                </>
-              ) : (
-                <></>
-              )}
+              {pathname !== "/" ? <Sidebar /> : <></>}
               <ReactQueryDevtools initialIsOpen={false} />
             </QueryClientProvider>
             <ToastContainer autoClose={1000} hideProgressBar />

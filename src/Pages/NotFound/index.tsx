@@ -1,5 +1,6 @@
 import React from "react";
 import { useRouter } from "next-nprogress-bar";
+import Image from "next/image";
 
 const NotFound = () => {
   const router = useRouter();
@@ -24,7 +25,9 @@ const NotFound = () => {
           (backRef.current as any).style.filter = "invert(1)";
         }}
       >
-        <img
+        <Image
+          width={24}
+          height={24}
           ref={backRef}
           src={"/back.png"}
           alt={"Back"}

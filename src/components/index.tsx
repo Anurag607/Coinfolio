@@ -10,10 +10,7 @@ import Navbar from "./Navbar";
 import Sidebar from "./Sidebar";
 import Search from "./Search";
 import Filter from "./Filter";
-import FAB from "./FAB";
-import Pagination from "./Pagination";
 import LoadingSpinner from "./LoadingSpinner";
-import OffCanvasPopup from "./OffCanvasPopup";
 import CoinChart from "./Charts";
 
 export {
@@ -26,9 +23,6 @@ export {
   Sidebar,
   Search,
   Filter,
-  FAB,
-  Pagination,
   LoadingSpinner,
-  OffCanvasPopup,
   CoinChart,
 };

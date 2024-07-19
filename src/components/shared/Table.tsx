@@ -41,8 +41,6 @@ const Table = ({
   } = useAppSelector((state: any) => state.coins);
 
   useEffect(() => {
-    // console.log("Table Data: ", data);
-    console.log("Search Params: ", searchParams);
     let filteredData = backupData.filter((coin: any) => {
       return coin.name.toLowerCase().includes(searchParams.toLowerCase());
     });
@@ -54,6 +52,7 @@ const Table = ({
         data: filteredData,
       })
     );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchParams]);
 
   return (

@@ -5,7 +5,8 @@ const nextConfig = {
     images: {
         domains: [
             "assets.coingecko.com",
-            "coin-images.coingecko.com"
+            "coin-images.coingecko.com",
+            "i.gifer.com",
         ],
     },
     logging: {
