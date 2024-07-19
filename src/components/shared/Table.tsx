@@ -60,8 +60,9 @@ const Table = ({
       className={classNames({
         "relative shadow-[0px_0px_10px_0px_#c5c5c5] dark:shadow-[0px_0px_0px_0px_#333333] sm:rounded-lg":
           true,
-        [`${type === "primary" ? "h-[66.5vh] ml-4" : "h-[32vh]"} w-full`]: true,
+        [`${type === "primary" ? "h-[66.5vh]" : "h-[32vh]"} w-full`]: true,
         "overflow-y-scroll dark:bg-neutral-800": true,
+        "ml-4": isSidebarOpen && type === "primary",
       })}
     >
       {type !== "primary" && (

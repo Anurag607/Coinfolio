@@ -113,11 +113,6 @@ const CoinChart = ({
     });
   }, [selectedCoinData]);
 
-  useEffect(() => {
-    RefereshCoinDetails();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedCoin]);
-
   const series = [
     {
       name: selectedCoin,
@@ -206,7 +201,12 @@ const CoinChart = ({
                   "!border-none !outline-none": true,
                   hidden: !isCoinOpen,
                 })}
-                onClick={(e) => dispatch(setSelectedCoin(item.id))}
+                onClick={(e) => {
+                  e.preventDefault();
+                  dispatch(setSelectedCoin(item.id));
+                  RefereshCoinDetails();
+                  setIsCoinOpen(false);
+                }}
               >
                 {item.name}
               </li>

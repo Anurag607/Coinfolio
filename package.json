@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "prod": "next build && next start"
   },
   "dependencies": {
     "@ant-design/icons": "^5.3.7",
@@ -27,6 +28,7 @@
     "react-redux": "^9.1.2",
     "react-toastify": "^10.0.5",
     "redux-persist": "^6.0.0",
+    "sharp": "^0.33.4",
     "tailwindcss-animate": "^1.0.7",
     "usehooks-ts": "^3.1.0"
   },

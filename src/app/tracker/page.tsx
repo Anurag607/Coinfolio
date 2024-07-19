@@ -77,6 +77,7 @@ export default function Page() {
               );
               setIsFetching(false);
             });
+          setIsFetching(false);
         } else {
           setIsFetching(false);
         }
@@ -209,26 +210,34 @@ export default function Page() {
                   <Table
                     type={"primary"}
                     data={currentData.data}
-                    RefereshCoinDetails={RefereshCoinDetails}
+                    RefereshCoinDetails={() => {
+                      RefereshCoinDetails();
+                    }}
                   />
                 </div>
                 <div className="w-[35%] h-fit flex flex-col items-center justify-center gap-y-4">
                   <Table
                     type={"watchlist"}
                     data={watchlist}
-                    RefereshCoinDetails={RefereshCoinDetails}
+                    RefereshCoinDetails={() => {
+                      RefereshCoinDetails();
+                    }}
                   />
                   <Table
                     type={"recentlyViewed"}
                     data={recentlyViewed}
-                    RefereshCoinDetails={RefereshCoinDetails}
+                    RefereshCoinDetails={() => {
+                      RefereshCoinDetails();
+                    }}
                   />
                 </div>
               </div>
             </>
           ) : (
             <CoinChart
-              RefereshCoinDetails={RefereshCoinDetails}
+              RefereshCoinDetails={() => {
+                RefereshCoinDetails();
+              }}
               isFetching={isFetching}
             />
           )}
