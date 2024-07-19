@@ -170,7 +170,7 @@ export default function Page() {
                   <div className="h-full w-[0.5rem]" />
                   <Filter />
                 </div>
-                <div className="w-full flex items-center justify-start gap-x-4">
+                <div className="w-full flex items-center justify-start gap-x-4 pb-8">
                   {Object.keys(CoinDataLists).map(
                     (key: string, index: number) => {
                       return (
@@ -205,7 +205,7 @@ export default function Page() {
                   )}
                 </div>
               </div>
-              <div className="w-full relative flex flex-row flex-wrap items-start justify-center gap-4">
+              <div className="w-full relative flex flex-row flex-wrap items-start justify-center gap-4 mt-0">
                 <div className="w-[60%] h-fit relative flex">
                   <Table
                     type={"primary"}

@@ -133,6 +133,7 @@ const CoinChart = ({
       className={classNames({
         "w-[99%] h-full relative flex flex-col items-end justify-start gap-y-8":
           true,
+        "pr-4 overflow-scroll": true,
         "pl-12": isSidebarOpen,
         "pl-0": !isSidebarOpen,
       })}
@@ -172,8 +173,7 @@ const CoinChart = ({
         </button>
         <div
           className={classNames({
-            "flex flex-col justify-start items-start pr-2.5 overflow-hidden":
-              true,
+            "flex flex-col justify-start items-start pr-2.5": true,
             "z-[1000001] bg-neutral-200 divide-y divide-gray-100 rounded-lg shadow dark:bg-neutral-700":
               true,
             "absolute top-[2.75rem] right-0": true,
