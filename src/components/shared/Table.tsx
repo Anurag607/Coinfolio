@@ -255,28 +255,30 @@ const Table = ({
               })}
             </>
           ) : (
-            <div className="w-full h-full bg-neutral-300 dark:bg-neutral-700 flex flex-col justify-center items-center gap-3 absolute top-0 left-0 overflow-clip pb-12">
-              <Image
-                priority={true}
-                height={400}
-                width={400}
-                alt={"NotFound"}
-                src="/bw-nf.png"
-                className={classNames({
-                  "brightness-[40%] dark:brightness-100 object-contain h-1/2 shrink-0":
-                    true,
-                })}
-              />
-              <div className="relative flex flex-col justify-center items-center gap-2 mobile:gap-1">
-                <h4 className="rubik text-primary font-bold text-xl text-center">
-                  {type === "primary"
-                    ? "No Data Found!..."
-                    : type === "watchlist"
-                    ? "Your Watchlist is Empty!"
-                    : "You haven't viewed any coins yet!"}
-                </h4>
-              </div>
-            </div>
+            <tr className="w-full h-full bg-neutral-300 dark:bg-neutral-700 absolute top-0 left-0 overflow-clip pb-12">
+              <td className="w-full h-full flex flex-col justify-center items-center gap-3 relative">
+                <Image
+                  priority={true}
+                  height={400}
+                  width={400}
+                  alt={"NotFound"}
+                  src="/bw-nf.png"
+                  className={classNames({
+                    "brightness-[40%] dark:brightness-100 object-contain h-1/2 shrink-0":
+                      true,
+                  })}
+                />
+                <div className="relative flex flex-col justify-center items-center gap-2 mobile:gap-1">
+                  <h4 className="rubik text-primary font-bold text-xl text-center">
+                    {type === "primary"
+                      ? "No Data Found!..."
+                      : type === "watchlist"
+                      ? "Your Watchlist is Empty!"
+                      : "You haven't viewed any coins yet!"}
+                  </h4>
+                </div>
+              </td>
+            </tr>
           )}
         </DroppableTable>
       </table>

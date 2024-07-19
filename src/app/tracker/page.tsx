@@ -98,6 +98,7 @@ export default function Page() {
     CoinFetcher(dispatch)
       .then((res: any) => {
         dispatch(setSelectedCoin("bitcoin"));
+        RefereshCoinDetails();
         dispatch(setCurrentData({ currentDataId: "All Coins", data: res }));
         CategoryFetcher(dispatch).then((res: any) => {
           CompanyFetcher("bitcoin").then((res) => {
@@ -146,8 +147,8 @@ export default function Page() {
   if (isLoading || isFetching) {
     return (
       <div className="fixed top-0 left-0 flex flex-col gap-4 items-center justify-center h-screen w-screen bg-zinc-800 bg-opacity-80 z-[100000] overflow-hidden">
-        <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-primary" />
-        <h4 className="text-primary font-bold text-2xl mobile:w-[15rem] text-center">{`Getting Latest Crypto Currency Data...`}</h4>
+        <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-white" />
+        <h4 className="text-white font-bold text-2xl mobile:w-[15rem] text-center">{`Getting Latest Crypto Currency Data...`}</h4>
       </div>
     );
   }
