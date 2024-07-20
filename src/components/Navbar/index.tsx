@@ -7,6 +7,7 @@ import { openSidebar } from "@/redux/reducers/sidebarSlice";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { useRouter } from "next-nprogress-bar";
 import { usePathname } from "next/navigation";
+import NavSearch from "./Searchbar";
 
 const Navbar = () => {
   const router = useRouter();
@@ -64,6 +65,7 @@ const Navbar = () => {
           </h3>
         </div>
       </div>
+      <NavSearch />
       <div className={`flex gap-x-2 items-center justify-center`}>
         <DarkMode />
       </div>
