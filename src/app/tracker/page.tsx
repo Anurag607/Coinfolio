@@ -46,6 +46,7 @@ export default function Page() {
   } = useAppSelector((state: any) => state.coins);
   const { searchParams } = useAppSelector((state: any) => state.searchBar);
   const { filterValue } = useAppSelector((state: any) => state.filter);
+  const [page, setPage] = useState(1);
 
   // useEffect(() => {
   //   console.log("Current Data: ", currentData);
@@ -98,7 +99,7 @@ export default function Page() {
     if (process.env.NEXT_PUBLIC_STATIC_API === "true") return;
     setIsLoading(true);
 
-    CoinFetcher(dispatch, 1, []).then((res: any) => {
+    CoinFetcher(dispatch, page, []).then((res: any) => {
       dispatch(setSelectedCoin("bitcoin"));
       dispatch(setCurrentData({ currentDataId: "All Coins", data: res }));
       CategoryFetcher(dispatch).then((res: any) => {
@@ -175,7 +176,7 @@ export default function Page() {
               >
                 <div
                   className={classNames({
-                    "h-fit mb-8 w-full z-[10000] relative": true,
+                    "h-fit mb-8 w-full z-[100] relative": true,
                     "flex items-center justify-start": true,
                     "filter-search-bar:ml-14": true,
                   })}
@@ -223,6 +224,8 @@ export default function Page() {
                 <div className="w-[60%] h-fit relative flex">
                   <Table
                     type={"primary"}
+                    page={page}
+                    setPage={setPage}
                     data={currentData.data}
                     RefereshCoinDetails={() => {
                       RefereshCoinDetails();
@@ -232,6 +235,8 @@ export default function Page() {
                 <div className="w-[35%] h-fit flex flex-col items-center justify-center gap-y-4">
                   <Table
                     type={"watchlist"}
+                    page={page}
+                    setPage={setPage}
                     data={watchlist}
                     RefereshCoinDetails={() => {
                       RefereshCoinDetails();
@@ -239,6 +244,8 @@ export default function Page() {
                   />
                   <Table
                     type={"recentlyViewed"}
+                    page={page}
+                    setPage={setPage}
                     data={recentlyViewed}
                     RefereshCoinDetails={() => {
                       RefereshCoinDetails();
