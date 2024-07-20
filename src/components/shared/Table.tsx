@@ -48,6 +48,7 @@ const Table = ({
   } = useAppSelector((state: any) => state.coins);
 
   const [loading, setLoading] = useState(false);
+  const [coinData, setCoinDataState] = useState<{ [key: number]: any[] }>({});
 
   useEffect(() => {
     let filteredData = backupData.filter((coin: any) => {
@@ -66,11 +67,26 @@ const Table = ({
 
   useEffect(() => {
     const fetchData = async () => {
+      if (coinData[page]) {
+        dispatch(setCoinData(coinData[page]));
+        dispatch(
+          setCurrentData({
+            currentDataId: currentData.currentDataId,
+            data: coinData[page],
+          })
+        );
+        return;
+      }
+
       setLoading(true);
       const response = await fetch(
         `https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=20&page=${page}&sparkline=false`
       );
       const newData = await response.json();
+      setCoinDataState((prevData) => ({
+        ...prevData,
+        [page]: newData,
+      }));
       dispatch(setCoinData(newData));
       dispatch(
         setCurrentData({
@@ -80,7 +96,11 @@ const Table = ({
       );
       setLoading(false);
     };
-    fetchData();
+    try {
+      fetchData();
+    } catch {
+      // ...
+    }
   }, [page, dispatch]);
 
   return (
@@ -318,7 +338,7 @@ const Table = ({
               </tr>
             )}
           </DroppableTable>
-          {type === "primary" && (
+          {type === "primary" && data.length >= 20 && (
             <tfoot>
               <tr>
                 <td colSpan={5} className="p-4">

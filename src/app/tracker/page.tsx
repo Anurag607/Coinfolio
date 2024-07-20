@@ -226,7 +226,11 @@ export default function Page() {
                     type={"primary"}
                     page={page}
                     setPage={setPage}
-                    data={currentData.data}
+                    data={
+                      currentData.currentDataId === "All Coins"
+                        ? coinData
+                        : currentData.data
+                    }
                     RefereshCoinDetails={() => {
                       RefereshCoinDetails();
                     }}
