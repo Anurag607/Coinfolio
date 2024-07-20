@@ -65,7 +65,7 @@ const Navbar = () => {
           </h3>
         </div>
       </div>
-      <NavSearch />
+      {pathname !== "/" && <NavSearch />}
       <div className={`flex gap-x-2 items-center justify-center`}>
         <DarkMode />
       </div>
