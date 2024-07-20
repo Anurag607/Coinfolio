@@ -14,6 +14,7 @@ import {
   CoinChartDataFetcher,
   CoinDetailFetcher,
   CoinFetcher,
+  CoinListFetcher,
   CompanyFetcher,
   GlobalDataFetcher,
 } from "@/scripts/fetchScript";
@@ -21,6 +22,7 @@ import { toast } from "react-toastify";
 import { ToastConfig } from "@/utils/config";
 import Table from "@/components/shared/Table";
 import {
+  setCoinList,
   setCurrentData,
   setGlobalData,
   setHoldingData,
@@ -95,26 +97,25 @@ export default function Page() {
   const getCoinData = async () => {
     if (process.env.NEXT_PUBLIC_STATIC_API === "true") return;
     setIsLoading(true);
-    CoinFetcher(dispatch)
-      .then((res: any) => {
-        dispatch(setSelectedCoin("bitcoin"));
-        RefereshCoinDetails();
-        dispatch(setCurrentData({ currentDataId: "All Coins", data: res }));
-        CategoryFetcher(dispatch).then((res: any) => {
-          CompanyFetcher("bitcoin").then((res) => {
-            dispatch(setHoldingData(res));
-            GlobalDataFetcher().then((res) => {
-              dispatch(setGlobalData(res));
-              setIsLoading(false);
-            });
+
+    CoinFetcher(dispatch, 1, []).then((res: any) => {
+      dispatch(setSelectedCoin("bitcoin"));
+      dispatch(setCurrentData({ currentDataId: "All Coins", data: res }));
+      CategoryFetcher(dispatch).then((res: any) => {
+        CompanyFetcher("bitcoin").then((res) => {
+          dispatch(setHoldingData(res));
+          GlobalDataFetcher().then((res) => {
+            dispatch(setGlobalData(res));
+            setIsLoading(false);
           });
         });
-      })
-      .catch((err) => {
-        setIsLoading(false);
-        toast.error("Failed to fetch data", ToastConfig);
       });
+    });
   };
+
+  useEffect(() => {
+    RefereshCoinDetails();
+  }, [selectedCoin]);
 
   useEffect(() => {
     getCoinData();

@@ -1,30 +1,24 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import ErrorBoundaryWrapper from "./ErrorBoundary";
-import LoaderSkeleton from "./LoadingUI";
-import ScrollToTop from "./ScrollToTop";
-import DarkMode from "./DarkMode";
-import Footer from "./Footer";
-import Navbar from "./Navbar";
-import Sidebar from "./Sidebar";
-import Search from "./Search";
-import Filter from "./Filter";
-import LoadingSpinner from "./LoadingSpinner";
-import CoinChart from "./Charts";
-import Home from "./Home";
 
-export {
-  ErrorBoundaryWrapper,
-  LoaderSkeleton,
-  ScrollToTop,
-  DarkMode,
-  Footer,
-  Navbar,
-  Sidebar,
-  Search,
-  Filter,
-  LoadingSpinner,
-  CoinChart,
-  Home,
-};
+export const ErrorBoundaryWrapper = dynamic(() => import("./ErrorBoundary"), {
+  ssr: true,
+});
+export const LoaderSkeleton = dynamic(() => import("./LoadingUI"), {
+  ssr: true,
+});
+export const ScrollToTop = dynamic(() => import("./ScrollToTop"), {
+  ssr: true,
+});
+export const DarkMode = dynamic(() => import("./DarkMode"), { ssr: true });
+export const Footer = dynamic(() => import("./Footer"), { ssr: true });
+export const Navbar = dynamic(() => import("./Navbar"), { ssr: true });
+export const Sidebar = dynamic(() => import("./Sidebar"), { ssr: true });
+export const Search = dynamic(() => import("./Search"), { ssr: true });
+export const Filter = dynamic(() => import("./Filter"), { ssr: true });
+export const LoadingSpinner = dynamic(() => import("./LoadingSpinner"), {
+  ssr: true,
+});
+export const CoinChart = dynamic(() => import("./Charts"), { ssr: true });
+export const Home = dynamic(() => import("./Home"), { ssr: true });

@@ -2,6 +2,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 const coinSlice = createSlice({
   name: "coins",
   initialState: {
+    coinList: [] as any[],
     coinData: [] as any[],
     backupData: [] as any[],
     categoryData: [] as any[],
@@ -22,6 +23,9 @@ const coinSlice = createSlice({
     globalData: {},
   },
   reducers: {
+    setCoinList: (state, action) => {
+      state.coinList = action.payload;
+    },
     setCoinData: (state, action) => {
       state.coinData = action.payload;
       if (state.backupData.length < 50) state.backupData = action.payload;
@@ -123,6 +127,7 @@ const coinSlice = createSlice({
 });
 
 export const {
+  setCoinList,
   setCoinData,
   setCategoryData,
   clearCoinData,

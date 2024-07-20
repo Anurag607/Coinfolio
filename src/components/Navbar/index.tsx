@@ -14,6 +14,7 @@ const Navbar = () => {
   const dispatch = useAppDispatch();
   const pathname = usePathname();
   const { isSidebarOpen } = useAppSelector((state: any) => state.sidebar);
+  const { currentSection } = useAppSelector((state: any) => state.section);
 
   return (
     <nav
@@ -65,7 +66,7 @@ const Navbar = () => {
           </h3>
         </div>
       </div>
-      {pathname !== "/" && <NavSearch />}
+      {pathname !== "/" && currentSection !== 1 && <NavSearch />}
       <div className={`flex gap-x-2 items-center justify-center`}>
         <DarkMode />
       </div>

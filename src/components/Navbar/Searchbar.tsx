@@ -4,15 +4,29 @@ import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { setGlobalSearch } from "@/redux/reducers/searchSlice";
 import { useOnClickOutside } from "usehooks-ts";
 import { useRef } from "react";
-import { updateRecentlySearched } from "@/redux/reducers/coinSlice";
+import {
+  setSelectedCoin,
+  updateRecentlySearched,
+} from "@/redux/reducers/coinSlice";
 import Image from "next/image";
 import useKeyPress from "@/custom-hooks/useKeyPress";
+import { setCurrentSection } from "@/redux/reducers/sectionSlice";
+import { toast } from "react-toastify";
+import { ToastConfig } from "@/utils/config";
+import coinList from "@/utils/coins.json";
+
+type coinType = {
+  id: string;
+  symbol: string;
+  name: string;
+}[];
 
 const NavSearch = () => {
   const navSearchRef = useRef(null);
   const [isSearching, setIsSearching] = useState(false);
   const dispatch = useAppDispatch();
   const [search, setSearch] = useState("");
+  const [searchResults, setSearchResults] = useState<coinType>([]);
   const [isNavSearchOpen, setIsNavSearchOpen] = useState(false);
   const { recentlysearched } = useAppSelector((state: any) => state.coins);
 
@@ -29,11 +43,45 @@ const NavSearch = () => {
     }
   }, [enterKeyPressed]);
 
+  useEffect(() => {
+    setIsNavSearchOpen(search.length > 0);
+
+    if (typeof coinList === "undefined" || coinList.length === 0) {
+      return;
+    }
+    const results = coinList.filter((item: any) => {
+      return (
+        item.name.toLowerCase().includes(search.toLowerCase()) ||
+        item.id.toLowerCase().includes(search.toLowerCase())
+      );
+    });
+    setSearchResults(results);
+  }, [search]);
+
   const handleSearch = () => {
     setIsSearching(true);
-    setIsNavSearchOpen(true);
     dispatch(setGlobalSearch(search));
     dispatch(updateRecentlySearched(search));
+
+    if (typeof coinList === "undefined" || coinList.length === 0) {
+      return;
+    }
+
+    const found = coinList.find((item) => {
+      return (
+        item.name.toLowerCase() === search.toLowerCase() ||
+        item.id.toLowerCase() === search.toLowerCase()
+      );
+    });
+
+    if (!found) {
+      toast.error("Currency not found!", ToastConfig);
+    } else {
+      dispatch(setSelectedCoin(found.id));
+      dispatch(setCurrentSection(2));
+    }
+
+    setIsSearching(false);
   };
 
   return (
@@ -104,46 +152,57 @@ const NavSearch = () => {
               true,
             "absolute top-[2.75rem] right-0": true,
             "shadow-xl transition-all overflow-y-scroll no-scrollbar": true, //animations
-            "h-0 py-0": !isNavSearchOpen,
-            "w-full max-h-[15rem]": isNavSearchOpen,
+            "h-0 py-0": !isNavSearchOpen || search === "",
+            "w-full max-h-[15rem]": isNavSearchOpen && search !== "",
           })}
         >
           {isSearching ? (
             <div className="flex flex-col gap-4 items-center justify-center h-[20rem] w-full bg-neutral-300 dark:bg-neutral-700 bg-opacity-80 z-[100000] overflow-hidden">
               <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-neutral-700 dark:border-neutral-300" />
             </div>
-          ) : recentlysearched.length > 0 ? (
-            <>
+          ) : recentlysearched.length > 0 || searchResults.length > 0 ? (
+            <div className="w-full h-fit overflow-clip pt-3 flex flex-col items-start justify-start gap-y-3">
+              {typeof searchResults !== "undefined" &&
+                searchResults.length > 0 && (
+                  <div className="w-full relative">
+                    <h4 className="text-neutral-800 dark:text-white text-sm font-medium px-6 pb-3 relative">
+                      {"Search Results"}
+                      <div className="w-3/4 h-[1px] bg-neutral-700 dark:bg-white" />
+                    </h4>
+                    {searchResults.map((item: any, index: number) => {
+                      return (
+                        <ListItem
+                          item={item}
+                          key={index}
+                          isNavSearchOpen={isNavSearchOpen}
+                          dispatch={dispatch}
+                          type={0}
+                        />
+                      );
+                    })}
+                  </div>
+                )}
               {typeof recentlysearched !== "undefined" &&
-                recentlysearched.map((item: any, index: number) => {
-                  return (
-                    <li
-                      key={index}
-                      data-value={item}
-                      className={classNames({
-                        "text-neutral-800 hover:bg-neutral-700 hover:text-white":
-                          true, //colors
-                        "dark:text-white dark:hover:bg-neutral-300 dark:hover:text-neutral-800":
-                          true, //colors (dark)
-                        "flex gap-4 items-center w-full": true, //layout
-                        "transition-all duration-300": true, //animation
-                        "rounded-md mx-2": true, //self style
-                        "cursor-pointer": true,
-                        "py-0 px-2": true,
-                        "flex items-center justify-start": true, //layout
-                        "!border-none !outline-none": true,
-                        hidden: !isNavSearchOpen,
-                      })}
-                      onClick={(e) => {
-                        e.preventDefault();
-                        dispatch(setGlobalSearch(item));
-                      }}
-                    >
-                      {item}
-                    </li>
-                  );
-                })}
-            </>
+                recentlysearched.length > 0 && (
+                  <div className="w-full relative">
+                    <h4 className="text-neutral-800 dark:text-white text-sm font-medium px-6 pb-3 relative">
+                      {"Recently Searched"}
+                      <div className="w-3/4 h-[1px] bg-neutral-700 dark:bg-white" />
+                    </h4>
+                    {recentlysearched.map((item: any, index: number) => {
+                      return (
+                        <ListItem
+                          item={item}
+                          key={index}
+                          isNavSearchOpen={isNavSearchOpen}
+                          dispatch={dispatch}
+                          type={1}
+                        />
+                      );
+                    })}
+                  </div>
+                )}
+            </div>
           ) : (
             <div className="w-full h-[20rem] bg-neutral-300 dark:bg-neutral-700 overflow-clip pt-3">
               <div className="w-full h-full flex flex-col justify-start items-center gap-3 relative">
@@ -160,7 +219,7 @@ const NavSearch = () => {
                 />
                 <div className="relative flex flex-col justify-center items-center gap-2 mobile:gap-1">
                   <h4 className="rubik text-primary font-bold text-xl text-center">
-                    {"No Results Found!..."}
+                    {"No Results or Suggestions Found!..."}
                   </h4>
                 </div>
               </div>
@@ -169,6 +228,31 @@ const NavSearch = () => {
         </div>
       </div>
     </div>
+  );
+};
+
+const ListItem = ({ item, isNavSearchOpen, dispatch, type }: any) => {
+  return (
+    <li
+      className={classNames({
+        "text-neutral-800 hover:bg-neutral-700 hover:text-white": true, //colors
+        "dark:text-white dark:hover:bg-neutral-300 dark:hover:text-neutral-800":
+          true, //colors (dark)
+        "flex gap-4 items-center w-full": true, //layout
+        "transition-all duration-300": true, //animations
+        "cursor-pointer": true,
+        "py-0 px-6 mb-4 w-full": true,
+        "flex items-center justify-start": true, //layout
+        "!border-none !outline-none": true,
+        hidden: !isNavSearchOpen,
+      })}
+      onClick={(e) => {
+        e.preventDefault();
+        dispatch(setGlobalSearch(type === 0 ? item.name : item));
+      }}
+    >
+      {type === 0 ? item.name : item}
+    </li>
   );
 };
 

@@ -1,21 +1,28 @@
+import Page from "@/app/tracker/page";
 import { setCategoryData, setCoinData } from "@/redux/reducers/coinSlice";
 
 const options = {
   method: "GET",
   headers: {
     accept: "application/json",
+    "Content-Type": "application/json",
+    "Access-Control-Allow-Origin": "*",
     "x-cg-demo-api-key": process.env.NEXT_PUBLIC_COINGECKO_API_KEY!,
   },
 };
 
-export const CoinFetcher = async (reduxDispatch: React.Dispatch<any>) => {
+export const CoinFetcher = async (
+  reduxDispatch: React.Dispatch<any>,
+  page: number,
+  coinData: any[]
+) => {
   try {
     const response = await fetch(
-      "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=100&page=1&sparkline=false",
+      `https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=20&page=${Page}&sparkline=false`,
       options
     );
     const data = await response.json();
-    reduxDispatch(setCoinData(data));
+    reduxDispatch(setCoinData([...coinData, data]));
     return data;
   } catch (err) {
     return [];
@@ -70,4 +77,13 @@ export const GlobalDataFetcher = async () => {
   );
   const data = await response.json();
   return data.data;
+};
+
+export const CoinListFetcher = async () => {
+  const response = await fetch(
+    `https://api.coingecko.com/api/v3/coins/list`,
+    options
+  );
+  const data = await response.json();
+  return data;
 };
