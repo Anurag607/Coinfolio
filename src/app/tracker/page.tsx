@@ -58,7 +58,6 @@ export default function Page() {
   });
 
   const RefereshCoinDetails = () => {
-    if (process.env.NEXT_PUBLIC_STATIC_API === "true") return;
     setIsFetching(true);
     CoinChartDataFetcher(selectedCoin)
       .then((res) => {
@@ -230,9 +229,6 @@ export default function Page() {
                         : currentData.data
                     }
                     setPageData={setPageData}
-                    RefereshCoinDetails={() => {
-                      RefereshCoinDetails();
-                    }}
                   />
                 </div>
                 <div className="w-[35%] h-fit flex flex-col items-center justify-center gap-y-4">
@@ -242,9 +238,6 @@ export default function Page() {
                     setPage={setPage}
                     data={watchlist}
                     setPageData={setPageData}
-                    RefereshCoinDetails={() => {
-                      RefereshCoinDetails();
-                    }}
                   />
                   <Table
                     type={"recentlyViewed"}
@@ -252,20 +245,12 @@ export default function Page() {
                     setPage={setPage}
                     data={recentlyViewed}
                     setPageData={setPageData}
-                    RefereshCoinDetails={() => {
-                      RefereshCoinDetails();
-                    }}
                   />
                 </div>
               </div>
             </>
           ) : (
-            <CoinChart
-              RefereshCoinDetails={() => {
-                RefereshCoinDetails();
-              }}
-              isFetching={isFetching}
-            />
+            <CoinChart isFetching={isFetching} />
           )}
         </DashboardPage>
       )}

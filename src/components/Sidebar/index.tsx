@@ -31,6 +31,10 @@ const Sidebar = () => {
     dispatch(closeSidebar());
   });
 
+  useEffect(() => {
+    dispatch(closeSidebar());
+  }, [currentSection]);
+
   return (
     <div
       className={classNames({

@@ -29,14 +29,12 @@ const Table = ({
   setPage,
   data,
   setPageData,
-  RefereshCoinDetails,
 }: {
   type: string;
   page: number;
   setPage: any;
   data: any[];
   setPageData: any;
-  RefereshCoinDetails: any;
 }) => {
   const dispatch = useAppDispatch();
   const { searchParams } = useAppSelector((state: any) => state.searchBar);
@@ -241,7 +239,6 @@ const Table = ({
                           })}
                           onClick={(e) => {
                             e.preventDefault();
-                            RefereshCoinDetails();
                             dispatch(updateRecentlyViewed(coin));
                             dispatch(setSelectedCoin(coin.id));
                             dispatch(setCurrentSection(2));

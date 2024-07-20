@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect, SetStateAction } from "react";
 import dynamic from "next/dynamic";
 import { setSelectedCoin } from "@/redux/reducers/coinSlice";
 import classNames from "classnames";
@@ -43,13 +43,7 @@ const options = {
   },
 } as any;
 
-const CoinChart = ({
-  RefereshCoinDetails,
-  isFetching,
-}: {
-  RefereshCoinDetails: any;
-  isFetching: boolean;
-}) => {
+const CoinChart = ({ isFetching }: { isFetching: boolean }) => {
   const dispatch = useAppDispatch();
   const chartRef = useRef<HTMLDivElement>(null);
   const [isCoinOpen, setIsCoinOpen] = useState(false);
@@ -64,6 +58,18 @@ const CoinChart = ({
   const [chartParameters, setChartParameters] = useState<{
     [key: string]: any;
   }>({});
+
+  const [selectionData, setSelectionData] = useState<any[]>([]);
+
+  useEffect(() => {
+    let temp: any = [];
+    Object.keys(backupData).map((page: string) => {
+      backupData[page].map((coin: any) => {
+        temp.push(coin);
+      });
+    });
+    setSelectionData(temp);
+  }, [backupData]);
 
   useOnClickOutside(chartRef, () => {
     setIsCoinOpen(false);
@@ -182,11 +188,10 @@ const CoinChart = ({
             "w-full max-h-[15rem]": isCoinOpen,
           })}
         >
-          {backupData.map((item: any, index: number) => {
+          {selectionData.map((item: any, index: number) => {
             return (
               <li
                 key={index}
-                data-value={item.id}
                 className={classNames({
                   "text-neutral-800 hover:bg-neutral-700 hover:text-white":
                     true, //colors
@@ -204,7 +209,6 @@ const CoinChart = ({
                 onClick={(e) => {
                   e.preventDefault();
                   dispatch(setSelectedCoin(item.id));
-                  RefereshCoinDetails();
                   setIsCoinOpen(false);
                 }}
               >
