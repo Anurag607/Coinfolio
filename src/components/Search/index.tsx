@@ -13,6 +13,7 @@ const Search = () => {
   const { recentlysearched } = useAppSelector((state: any) => state.coins);
 
   useOnClickOutside(searchRef, () => {
+    dispatch(updateRecentlySearched(search));
     setIsSearchOpen(false);
   });
 
@@ -62,22 +63,9 @@ const Search = () => {
           onChange={(e) => {
             let searchText = e.currentTarget.value;
             setSearch(searchText);
+            dispatch(setSearchParams(search));
           }}
         />
-        <button
-          className={classNames({
-            "absolute inset-y-[2px] translate-y-[1px] right-0 grid place-items-center px-3 py-1.5 rounded-md h-fit mr-[3px]":
-              true,
-            "bg-neutral-600 text-white text-sm": true,
-          })}
-          onClick={(e) => {
-            e.preventDefault();
-            dispatch(setSearchParams(search));
-            dispatch(updateRecentlySearched(search));
-          }}
-        >
-          {"Search"}
-        </button>
         <div
           className={classNames({
             "flex flex-col justify-start items-start pr-2.5": true,

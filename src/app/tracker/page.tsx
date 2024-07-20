@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import DashboardPage from "@/Pages/Dashboard";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
-import { CoinChart, Filter, Home, Search } from "@/components";
+import { CoinChart, Home, Search } from "@/components";
 import classNames from "classnames";
 import Image from "next/image";
 import { closeSidebar, openSidebar } from "@/redux/reducers/sidebarSlice";
@@ -14,7 +14,6 @@ import {
   CoinChartDataFetcher,
   CoinDetailFetcher,
   CoinFetcher,
-  CoinListFetcher,
   CompanyFetcher,
   GlobalDataFetcher,
 } from "@/scripts/fetchScript";
@@ -22,6 +21,7 @@ import { toast } from "react-toastify";
 import { ToastConfig } from "@/utils/config";
 import Table from "@/components/shared/Table";
 import {
+  setCategoryData,
   setCoinList,
   setCurrentData,
   setGlobalData,
@@ -42,16 +42,11 @@ export default function Page() {
     watchlist,
     recentlyViewed,
     backupData,
-    categoryData,
   } = useAppSelector((state: any) => state.coins);
   const { searchParams } = useAppSelector((state: any) => state.searchBar);
   const { filterValue } = useAppSelector((state: any) => state.filter);
   const [page, setPage] = useState(1);
-
-  // useEffect(() => {
-  //   console.log("Current Data: ", currentData);
-  //   console.log("Category Data: ", categoryData);
-  // }, [currentData, categoryData]);
+  const [pageData, setPageData] = useState<any[]>([]);
 
   const swipeHandlers = useSwipe({
     onSwipedLeft: () => {
@@ -99,19 +94,20 @@ export default function Page() {
     if (process.env.NEXT_PUBLIC_STATIC_API === "true") return;
     setIsLoading(true);
 
-    CoinFetcher(dispatch, page, []).then((res: any) => {
-      dispatch(setSelectedCoin("bitcoin"));
-      dispatch(setCurrentData({ currentDataId: "All Coins", data: res }));
-      CategoryFetcher(dispatch).then((res: any) => {
-        CompanyFetcher("bitcoin").then((res) => {
-          dispatch(setHoldingData(res));
-          GlobalDataFetcher().then((res) => {
-            dispatch(setGlobalData(res));
-            setIsLoading(false);
-          });
-        });
-      });
-    });
+    try {
+      const categories = await CategoryFetcher();
+      dispatch(setCategoryData(categories));
+
+      const companyData = await CompanyFetcher("bitcoin");
+      dispatch(setHoldingData(companyData));
+
+      const globalData = await GlobalDataFetcher();
+      dispatch(setGlobalData(globalData));
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -119,8 +115,11 @@ export default function Page() {
   }, [selectedCoin]);
 
   useEffect(() => {
+    setPage(1);
+    dispatch(setCurrentData({ currentDataId: "All Coins", data: [] }));
+    dispatch(setSelectedCoin("bitcoin"));
+
     getCoinData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -183,7 +182,6 @@ export default function Page() {
                 >
                   <Search />
                   <div className="h-full w-[0.5rem]" />
-                  <Filter />
                 </div>
                 <div className="w-full flex items-center justify-start gap-x-4 pb-8">
                   {Object.keys(CoinDataLists).map(
@@ -208,7 +206,7 @@ export default function Page() {
                             dispatch(
                               setCurrentData({
                                 currentDataId: key,
-                                data: CoinDataLists[key],
+                                data: [],
                               })
                             );
                           }}
@@ -228,9 +226,10 @@ export default function Page() {
                     setPage={setPage}
                     data={
                       currentData.currentDataId === "All Coins"
-                        ? coinData
+                        ? pageData
                         : currentData.data
                     }
+                    setPageData={setPageData}
                     RefereshCoinDetails={() => {
                       RefereshCoinDetails();
                     }}
@@ -242,6 +241,7 @@ export default function Page() {
                     page={page}
                     setPage={setPage}
                     data={watchlist}
+                    setPageData={setPageData}
                     RefereshCoinDetails={() => {
                       RefereshCoinDetails();
                     }}
@@ -251,6 +251,7 @@ export default function Page() {
                     page={page}
                     setPage={setPage}
                     data={recentlyViewed}
+                    setPageData={setPageData}
                     RefereshCoinDetails={() => {
                       RefereshCoinDetails();
                     }}

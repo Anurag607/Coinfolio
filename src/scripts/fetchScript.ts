@@ -1,6 +1,3 @@
-import Page from "@/app/tracker/page";
-import { setCategoryData, setCoinData } from "@/redux/reducers/coinSlice";
-
 const options = {
   method: "GET",
   headers: {
@@ -11,32 +8,26 @@ const options = {
   },
 };
 
-export const CoinFetcher = async (
-  reduxDispatch: React.Dispatch<any>,
-  page: number,
-  coinData: any[]
-) => {
+export const CoinFetcher = async (page: number) => {
   try {
     const response = await fetch(
-      `https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=20&page=${Page}&sparkline=false`,
+      `https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=20&page=${page}&sparkline=false`,
       options
     );
     const data = await response.json();
-    reduxDispatch(setCoinData([...coinData, data]));
     return data;
   } catch (err) {
     return [];
   }
 };
 
-export const CategoryFetcher = async (reduxDispatch: React.Dispatch<any>) => {
+export const CategoryFetcher = async () => {
   try {
     const response = await fetch(
       "https://api.coingecko.com/api/v3/coins/categories/list",
       options
     );
     const data = await response.json();
-    reduxDispatch(setCategoryData(data));
     return data;
   } catch (err) {
     return [];

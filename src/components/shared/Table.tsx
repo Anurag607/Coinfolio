@@ -3,7 +3,6 @@ import classNames from "classnames";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import {
   setCoinData,
-  setCurrentData,
   setSelectedCoin,
   updateRecentlyViewed,
   updateWatchlist,
@@ -16,6 +15,7 @@ import Image from "next/image";
 import DraggableCoin from "./DraggableCoin";
 import DroppableTable from "./DroppableTable";
 import { CaretLeftFilled, CaretRightFilled } from "@ant-design/icons";
+import { CoinFetcher } from "@/scripts/fetchScript";
 
 function formatCurrency(value: number) {
   return new Intl.NumberFormat("en-US", {
@@ -28,19 +28,21 @@ const Table = ({
   page,
   setPage,
   data,
+  setPageData,
   RefereshCoinDetails,
 }: {
   type: string;
   page: number;
   setPage: any;
   data: any[];
+  setPageData: any;
   RefereshCoinDetails: any;
 }) => {
   const dispatch = useAppDispatch();
   const { searchParams } = useAppSelector((state: any) => state.searchBar);
   const { isSidebarOpen } = useAppSelector((state: any) => state.sidebar);
   const {
-    currentData,
+    coinData,
     watchlist,
     backupData,
     sort_market_cap,
@@ -48,60 +50,36 @@ const Table = ({
   } = useAppSelector((state: any) => state.coins);
 
   const [loading, setLoading] = useState(false);
-  const [coinData, setCoinDataState] = useState<{ [key: number]: any[] }>({});
 
   useEffect(() => {
-    let filteredData = backupData.filter((coin: any) => {
+    if (!backupData.hasOwnProperty(page)) return;
+    let filteredData = backupData[page].filter((coin: any) => {
       return coin.name.toLowerCase().includes(searchParams.toLowerCase());
     });
-    if (searchParams === "") filteredData = backupData;
-    dispatch(setCoinData(filteredData));
-    dispatch(
-      setCurrentData({
-        currentDataId: currentData.currentDataId,
-        data: filteredData,
-      })
-    );
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    if (searchParams === "") filteredData = backupData[page];
+    setPageData(filteredData);
+    setCoinData({ page, data: filteredData });
   }, [searchParams]);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      if (coinData[page]) {
-        dispatch(setCoinData(coinData[page]));
-        dispatch(
-          setCurrentData({
-            currentDataId: currentData.currentDataId,
-            data: coinData[page],
-          })
-        );
-        return;
-      }
-
-      setLoading(true);
-      const response = await fetch(
-        `https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=20&page=${page}&sparkline=false`
-      );
-      const newData = await response.json();
-      setCoinDataState((prevData) => ({
-        ...prevData,
-        [page]: newData,
-      }));
-      dispatch(setCoinData(newData));
-      dispatch(
-        setCurrentData({
-          currentDataId: currentData.currentDataId,
-          data: newData,
-        })
-      );
-      setLoading(false);
-    };
-    try {
-      fetchData();
-    } catch {
-      // ...
+  const fetchData = async () => {
+    if (coinData.hasOwnProperty(page)) {
+      setPageData(coinData[page]);
+      return;
     }
-  }, [page, dispatch]);
+
+    setLoading(true);
+
+    const newData = await CoinFetcher(page);
+    setPageData(newData);
+
+    dispatch(setCoinData({ page, data: newData }));
+
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, [page]);
 
   return (
     <div
@@ -161,17 +139,12 @@ const Table = ({
                     className="cursor-pointer"
                     onClick={() => {
                       let sortedData = sortData(
-                        data,
+                        coinData[page],
                         sort_current_price,
                         "current_price",
                         dispatch
                       );
-                      dispatch(
-                        setCurrentData({
-                          currentDataId: currentData.currentDataId,
-                          data: sortedData,
-                        })
-                      );
+                      setPageData(sortedData);
                     }}
                   >
                     <SortArrows />
@@ -185,17 +158,12 @@ const Table = ({
                     className="cursor-pointer"
                     onClick={() => {
                       let sortedData = sortData(
-                        data,
+                        coinData[page],
                         sort_market_cap,
                         "market_cap",
                         dispatch
                       );
-                      dispatch(
-                        setCurrentData({
-                          currentDataId: currentData.currentDataId,
-                          data: sortedData,
-                        })
-                      );
+                      setPageData(sortedData);
                     }}
                   >
                     <SortArrows />

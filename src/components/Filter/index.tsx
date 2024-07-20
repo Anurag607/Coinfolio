@@ -1,4 +1,4 @@
-import React from "react";
+import { useRef } from "react";
 import classNames from "classnames";
 import {
   openFilter,
@@ -7,13 +7,13 @@ import {
 } from "@/redux/reducers/filterSlice";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { useOnClickOutside } from "usehooks-ts";
-import { setCoinData } from "@/redux/reducers/coinSlice";
 import { FilterOutlined } from "@ant-design/icons";
 import filterData from "@/scripts/filterScript";
+import { setCoinData } from "@/redux/reducers/coinSlice";
 
 const Filter = () => {
   const dispatch = useAppDispatch();
-  const filterRef = React.useRef<HTMLDivElement>(null);
+  const filterRef = useRef<HTMLDivElement>(null);
   const { isFilterOpen } = useAppSelector((state: any) => state.filter);
   const { coinData, backupData, categoryData } = useAppSelector(
     (state: any) => state.coins

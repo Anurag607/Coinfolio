@@ -3,8 +3,8 @@ const coinSlice = createSlice({
   name: "coins",
   initialState: {
     coinList: [] as any[],
-    coinData: [] as any[],
-    backupData: [] as any[],
+    coinData: {} as any,
+    backupData: {} as any,
     categoryData: [] as any[],
     sort_market_cap: "desc",
     sort_current_price: "asc",
@@ -27,8 +27,12 @@ const coinSlice = createSlice({
       state.coinList = action.payload;
     },
     setCoinData: (state, action) => {
-      state.coinData = action.payload;
-      if (state.backupData.length < 50) state.backupData = action.payload;
+      let page = action.payload.page;
+      let data = action.payload.data;
+      state.coinData[page] = data;
+      if (!state.backupData.hasOwnProperty(page)) {
+        state.backupData[page] = data;
+      }
     },
     setCategoryData: (state, action) => {
       state.categoryData = action.payload;
