@@ -18,6 +18,7 @@ const NavSearch = () => {
 
   useOnClickOutside(navSearchRef, () => {
     setIsNavSearchOpen(false);
+    setIsSearching(false);
   });
 
   const enterKeyPressed = useKeyPress("Enter");
