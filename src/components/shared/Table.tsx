@@ -57,6 +57,7 @@ const Table = ({
     if (searchParams === "") filteredData = backupData[page];
     setPageData(filteredData);
     setCoinData({ page, data: filteredData });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchParams]);
 
   const fetchData = async () => {
@@ -77,6 +78,7 @@ const Table = ({
 
   useEffect(() => {
     fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page]);
 
   return (

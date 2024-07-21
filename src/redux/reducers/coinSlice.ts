@@ -104,6 +104,7 @@ const coinSlice = createSlice({
     updateRecentlySearched(state, action: PayloadAction<string>) {
       // state.recentlysearched = [];
       // return;
+      if (action.payload === "") return;
       state.recentlysearched = state.recentlysearched.filter(
         (coin: string) => coin !== action.payload
       );

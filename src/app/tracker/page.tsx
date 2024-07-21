@@ -111,6 +111,7 @@ export default function Page() {
 
   useEffect(() => {
     RefereshCoinDetails();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedCoin]);
 
   useEffect(() => {
@@ -119,6 +120,7 @@ export default function Page() {
     dispatch(setSelectedCoin("bitcoin"));
 
     getCoinData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {

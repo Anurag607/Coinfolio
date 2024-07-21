@@ -33,6 +33,7 @@ const Sidebar = () => {
 
   useEffect(() => {
     dispatch(closeSidebar());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentSection]);
 
   return (

@@ -40,6 +40,7 @@ const NavSearch = () => {
     if (enterKeyPressed) {
       handleSearch();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [enterKeyPressed]);
 
   useEffect(() => {
@@ -75,7 +76,8 @@ const NavSearch = () => {
       })
         .then(async (res: any) => {
           const data = await res.json();
-          if (!res.hasOwnProperty("id")) {
+          console.log("data: ", data);
+          if (!data.hasOwnProperty("id")) {
             toast.error("Currency not found!", ToastConfig);
           } else {
             dispatch(setSelectedCoin(data.id));
@@ -87,12 +89,14 @@ const NavSearch = () => {
         })
         .finally(() => {
           setIsSearching(false);
+          setIsNavSearchOpen(false);
         });
     })();
   };
 
   return (
     <div
+      ref={navSearchRef}
       className={classNames({
         "relative flex items-center justify-center": true,
         "lg:w-fit mr-1": true,
@@ -118,7 +122,6 @@ const NavSearch = () => {
           </svg>
         </div>
         <input
-          ref={navSearchRef}
           type="text"
           id="table-search"
           autoComplete="off"
@@ -184,6 +187,13 @@ const NavSearch = () => {
                           isNavSearchOpen={isNavSearchOpen}
                           dispatch={dispatch}
                           type={0}
+                          onClickHandler={(e: any) => {
+                            e.preventDefault();
+                            setSearch(item.name);
+                            dispatch(setSelectedCoin(item.id));
+                            dispatch(setCurrentSection(2));
+                            setIsNavSearchOpen(false);
+                          }}
                         />
                       );
                     })}
@@ -204,6 +214,11 @@ const NavSearch = () => {
                           isNavSearchOpen={isNavSearchOpen}
                           dispatch={dispatch}
                           type={1}
+                          onClickHandler={(e: any) => {
+                            e.preventDefault();
+                            setSearch(item);
+                            handleSearch();
+                          }}
                         />
                       );
                     })}
@@ -238,7 +253,7 @@ const NavSearch = () => {
   );
 };
 
-const ListItem = ({ item, isNavSearchOpen, dispatch, type }: any) => {
+const ListItem = ({ item, isNavSearchOpen, onClickHandler, type }: any) => {
   return (
     <li
       className={classNames({
@@ -253,10 +268,7 @@ const ListItem = ({ item, isNavSearchOpen, dispatch, type }: any) => {
         "!border-none !outline-none": true,
         hidden: !isNavSearchOpen,
       })}
-      onClick={(e) => {
-        e.preventDefault();
-        dispatch(setGlobalSearch(type === 0 ? item.name : item));
-      }}
+      onClick={onClickHandler}
     >
       {type === 0 ? item.name : item}
     </li>

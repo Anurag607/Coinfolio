@@ -24,6 +24,7 @@ const HomeaTable = ({ data }: { data: any[] }) => {
     CompanyFetcher(selectedCoin).then((res) => {
       dispatch(setHoldingData(res));
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
