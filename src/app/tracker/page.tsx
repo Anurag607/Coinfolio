@@ -12,6 +12,7 @@ import {
   CategoryFetcher,
   CoinChartDataFetcher,
   CoinDetailFetcher,
+  CoinFetcher,
   CompanyFetcher,
   GlobalDataFetcher,
 } from "@/scripts/fetchScript";
@@ -20,6 +21,7 @@ import { ToastConfig } from "@/utils/config";
 import Table from "@/components/shared/Table";
 import {
   setCategoryData,
+  setCoinData,
   setCurrentData,
   setGlobalData,
   setHoldingData,
@@ -32,14 +34,8 @@ export default function Page() {
   const [isLoading, setIsLoading] = useState(false);
   const [isFetching, setIsFetching] = useState(false);
   const { currentSection } = useAppSelector((state: any) => state.section);
-  const {
-    currentData,
-    selectedCoin,
-    coinData,
-    watchlist,
-    recentlyViewed,
-    backupData,
-  } = useAppSelector((state: any) => state.coins);
+  const { currentData, selectedCoin, coinData, watchlist, recentlyViewed } =
+    useAppSelector((state: any) => state.coins);
   const { searchParams } = useAppSelector((state: any) => state.searchBar);
   const [page, setPage] = useState(1);
   const [pageData, setPageData] = useState<any[]>([]);
@@ -86,10 +82,14 @@ export default function Page() {
   };
 
   const getCoinData = async () => {
-    if (process.env.NEXT_PUBLIC_STATIC_API === "true") return;
+    // if (process.env.NEXT_PUBLIC_STATIC_API === "true") return;
     setIsLoading(true);
 
     try {
+      const coins = await CoinFetcher(1);
+      setPageData(coins);
+      dispatch(setCoinData({ page: 1, data: coins }));
+
       const categories = await CategoryFetcher();
       dispatch(setCategoryData(categories));
 
