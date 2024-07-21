@@ -58,6 +58,7 @@ export default function Page() {
   });
 
   const RefereshCoinDetails = async () => {
+    setIsFetching(true);
     CoinChartDataFetcher(selectedCoin)
       .then((res) => {
         if (res.hasOwnProperty("prices")) {
