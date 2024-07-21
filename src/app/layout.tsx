@@ -110,11 +110,11 @@ export default function RootLayout({ children }: { children: any }) {
                       className={classNames({
                         [`relative h-screen ${
                           pathname === "/"
-                            ? "w-[97.5vw]"
+                            ? "w-screen"
                             : "w-[calc(100vw_-_3rem)]"
                         } flex flex-col items-start justify-between mobile:items-center`]:
                           true,
-                        "mobile:w-[90vw] xl:overflow-hidden": true,
+                        "mobile:w-[90vw] no-scrollbar overflow-x-hidden": true,
                       })}
                     >
                       <Navbar />

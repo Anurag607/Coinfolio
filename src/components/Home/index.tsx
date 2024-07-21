@@ -148,12 +148,12 @@ const Home = () => {
             )}
           </div>
         </div>
-        <div className="w-full dark:bg-neutral-800 py-5 rounded-md dark:!text-white">
+        <div className="max-w-full overflow-x-scroll dark:bg-neutral-800 py-5 rounded-md dark:!text-white">
           <Chart
             options={options}
             series={series}
             type="area"
-            width={"99%"}
+            width={"1600"}
             height={400}
             curve={"smooth"}
           />

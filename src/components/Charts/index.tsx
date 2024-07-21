@@ -41,16 +41,6 @@ const options = {
       },
     },
   },
-  responsive: [
-    {
-      breakpoint: 475,
-      options: {
-        plotOptions: {
-          fillTo: "end",
-        },
-      },
-    },
-  ],
 } as any;
 
 const CoinChart = ({ isFetching }: { isFetching: boolean }) => {
@@ -149,7 +139,7 @@ const CoinChart = ({ isFetching }: { isFetching: boolean }) => {
       className={classNames({
         "mobile:w-full w-[99%] h-full relative flex flex-col items-end justify-start gap-y-8":
           true,
-        "pr-4 overflow-scroll": true,
+        "mobile:pr-0 pr-4 mobile:no-scrollbar overflow-y-scroll": true,
         "mobile:pl-0 pl-12": isSidebarOpen,
         "pl-0": !isSidebarOpen,
       })}
@@ -230,12 +220,12 @@ const CoinChart = ({ isFetching }: { isFetching: boolean }) => {
       </div>
       {/* Chart */}
       <div className="flex flex-col items-center justify-center gap-y-4 relative w-full dark:bg-neutral-800 rounded-md dark:!text-white py-4">
-        <div className="w-full pt-5 dark:bg-neutral-800 rounded-md dark:!text-white">
+        <div className="max-w-full overflow-x-scroll pt-5 dark:bg-neutral-800 rounded-md dark:!text-white">
           <Chart
             options={options}
             series={series}
             type="area"
-            width={"99%"}
+            width={"1600"}
             height={400}
             curve={"smooth"}
           />
