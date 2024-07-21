@@ -22,6 +22,7 @@ import { ToastConfig } from "@/utils/config";
 import Table from "@/components/shared/Table";
 import {
   setCategoryData,
+  setCoinData,
   setCoinList,
   setCurrentData,
   setGlobalData,
@@ -94,6 +95,8 @@ export default function Page() {
     setIsLoading(true);
 
     try {
+      const coins = await CoinFetcher(page);
+      dispatch(setCoinData({ page: 1, data: coins }));
       const categories = await CategoryFetcher();
       dispatch(setCategoryData(categories));
 
