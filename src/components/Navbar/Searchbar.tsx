@@ -13,7 +13,6 @@ import useKeyPress from "@/custom-hooks/useKeyPress";
 import { setCurrentSection } from "@/redux/reducers/sectionSlice";
 import { toast } from "react-toastify";
 import { ToastConfig } from "@/utils/config";
-import coinList from "@/utils/coins.json";
 
 type coinType = {
   id: string;
@@ -44,18 +43,25 @@ const NavSearch = () => {
   }, [enterKeyPressed]);
 
   useEffect(() => {
+    setIsSearching(true);
     setIsNavSearchOpen(search.length > 0);
 
-    if (typeof coinList === "undefined" || coinList.length === 0) {
-      return;
-    }
-    const results = coinList.filter((item: any) => {
-      return (
-        item.name.toLowerCase().includes(search.toLowerCase()) ||
-        item.id.toLowerCase().includes(search.toLowerCase())
-      );
-    });
-    setSearchResults(results);
+    (async () => {
+      await fetch("/api/coinlist/", {
+        method: "POST",
+        body: JSON.stringify({ search }),
+      })
+        .then(async (res: any) => {
+          const data = await res.json();
+          setSearchResults(data);
+        })
+        .catch((err) => {
+          console.error(err);
+        })
+        .finally(() => {
+          setIsSearching(false);
+        });
+    })();
   }, [search]);
 
   const handleSearch = () => {
@@ -63,25 +69,26 @@ const NavSearch = () => {
     dispatch(setGlobalSearch(search));
     dispatch(updateRecentlySearched(search));
 
-    if (typeof coinList === "undefined" || coinList.length === 0) {
-      return;
-    }
-
-    const found = coinList.find((item) => {
-      return (
-        item.name.toLowerCase() === search.toLowerCase() ||
-        item.id.toLowerCase() === search.toLowerCase()
-      );
-    });
-
-    if (!found) {
-      toast.error("Currency not found!", ToastConfig);
-    } else {
-      dispatch(setSelectedCoin(found.id));
-      dispatch(setCurrentSection(2));
-    }
-
-    setIsSearching(false);
+    (async () => {
+      await fetch(`/api/coinlist/${search}`, {
+        method: "GET",
+      })
+        .then(async (res: any) => {
+          const data = await res.json();
+          if (!res.hasOwnProperty("id")) {
+            toast.error("Currency not found!", ToastConfig);
+          } else {
+            dispatch(setSelectedCoin(data.id));
+            dispatch(setCurrentSection(2));
+          }
+        })
+        .catch((err) => {
+          console.error(err);
+        })
+        .finally(() => {
+          setIsSearching(false);
+        });
+    })();
   };
 
   return (
@@ -219,7 +226,7 @@ const NavSearch = () => {
                 />
                 <div className="relative flex flex-col justify-center items-center gap-2 mobile:gap-1">
                   <h4 className="rubik text-primary font-bold text-xl text-center">
-                    {"No Results or Suggestions Found!..."}
+                    {"No Currencies Found!..."}
                   </h4>
                 </div>
               </div>
