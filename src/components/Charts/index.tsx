@@ -41,6 +41,16 @@ const options = {
       },
     },
   },
+  responsive: [
+    {
+      breakpoint: 475,
+      options: {
+        plotOptions: {
+          fillTo: "end",
+        },
+      },
+    },
+  ],
 } as any;
 
 const CoinChart = ({ isFetching }: { isFetching: boolean }) => {
@@ -137,10 +147,10 @@ const CoinChart = ({ isFetching }: { isFetching: boolean }) => {
   return (
     <div
       className={classNames({
-        "w-[99%] h-full relative flex flex-col items-end justify-start gap-y-8":
+        "mobile:w-full w-[99%] h-full relative flex flex-col items-end justify-start gap-y-8":
           true,
         "pr-4 overflow-scroll": true,
-        "pl-12": isSidebarOpen,
+        "mobile:pl-0 pl-12": isSidebarOpen,
         "pl-0": !isSidebarOpen,
       })}
     >
@@ -230,7 +240,7 @@ const CoinChart = ({ isFetching }: { isFetching: boolean }) => {
             curve={"smooth"}
           />
         </div>
-        <div className="w-full flex items-center justify-center gap-x-4">
+        <div className="w-full flex items-center justify-center gap-x-4 mobile-sm:gap-x-2">
           {Object.keys(chartParameters).map((key: string, index: number) => {
             return (
               <button
@@ -257,11 +267,11 @@ const CoinChart = ({ isFetching }: { isFetching: boolean }) => {
       {/* Performance Section */}
       {selectedCoinData.hasOwnProperty("id") ? (
         <div className="p-4rounded-lg w-full relative">
-          <h2 className="bound text-2xl font-medium mb-4 w-full relative text-neutral-700 dark:text-white">
+          <h2 className="bound mobile:text-xl text-2xl font-medium mb-4 w-full relative text-neutral-700 dark:text-white">
             {`Performance`}
             <div className="w-3/4 h-[1px] bg-neutral-700 dark:bg-white" />
           </h2>
-          <div className=" poppins w-[22rem]">
+          <div className="poppins w-[22rem]">
             {performance.map(
               (metric: { [key: string]: any }, index: number) => {
                 let change = 0;
@@ -294,23 +304,23 @@ const CoinChart = ({ isFetching }: { isFetching: boolean }) => {
                 return (
                   <div
                     key={index}
-                    className="w-full flex justify-between mb-2 tracking-tighter"
+                    className="w-full flex items-center justify-start min-mobile-sm:justify-between mb-2 tracking-tighter"
                   >
                     {Object.keys(metric).map((key: string, index: number) => {
                       return (
                         <div
                           key={index}
                           className={`h-fit ${
-                            index === 0 ? "w-full" : "w-fit"
-                          } relative flex items-center justify-center gap-x-2 mb-2 tracking-tighter`}
+                            index === 0 ? "w-fit min-mobile-sm:w-full" : "w-fit"
+                          } relative flex items-center justify-start sm:justify-center gap-x-2 mb-2 tracking-tighter`}
                         >
-                          <p className="text-neutral-400 text-center text-sm dark:text-neutral-300 w-[5rem]">
+                          <p className="text-neutral-400 text-center mobile-sm:text-xs text-sm dark:text-neutral-300 w-fit sm:w-[5rem]">
                             {key}
                             <br />
                             {formatCurrency(delta[key])}
                           </p>
                           {index === 0 ? (
-                            <div className="relative grow flex items-center justify-center h-full w-[15rem] mr-2">
+                            <div className="relative grow flex items-center justify-center h-full w-[7.5rem] xs:w-[10rem] sm:w-[15rem] mr-1 sm:mr-2">
                               <div className="rounded-full bg-emerald-500 h-[2.5px] w-full" />
                               <CaretUpFilled
                                 className={classNames({
@@ -339,16 +349,16 @@ const CoinChart = ({ isFetching }: { isFetching: boolean }) => {
       {/* Fundamental Section */}
       {selectedCoinData.hasOwnProperty("id") ? (
         <div className="p-4rounded-lg w-full relative">
-          <h2 className="bound text-2xl font-medium mb-4 w-full relative text-neutral-700 dark:text-white">
+          <h2 className="bound mobile:text-xl text-2xl font-medium mb-4 w-full relative text-neutral-700 dark:text-white">
             {`Fundamentals`}
             <div className="w-3/4 h-[1px] bg-neutral-700 dark:bg-white" />
           </h2>
-          <div className=" poppins w-[22rem]">
+          <div className="poppins mobile-sm:w-[85vw] w-[22rem]">
             {Object.keys(fundamentals).map((key: string, index: number) => {
               return (
                 <div
                   key={index}
-                  className="flex justify-between mb-2 tracking-tighter"
+                  className="flex flex-col xs:flex-row justify-between mb-2 tracking-tighter"
                 >
                   <p className="text-neutral-400 font-medium dark:text-neutral-300">
                     {key}
@@ -367,12 +377,12 @@ const CoinChart = ({ isFetching }: { isFetching: boolean }) => {
       {/* About Section */}
       {selectedCoinData.hasOwnProperty("description") ? (
         <div className="p-4rounded-lg w-full relative">
-          <h2 className="bound text-2xl font-medium mb-4 w-full relative text-neutral-700 dark:text-white">
+          <h2 className="bound mobile:text-xl text-2xl font-medium mb-4 w-full relative text-neutral-700 dark:text-white">
             {`About ${selectedCoinData.name}`}
             <div className="w-3/4 h-[1px] bg-neutral-700 dark:bg-white" />
           </h2>
           <div
-            className="text-neutral-600 dark:text-white poppins w-[90%]"
+            className="text-neutral-600 dark:text-white poppins w-full sm:w-[90%]"
             dangerouslySetInnerHTML={{
               __html:
                 selectedCoinData.description.en

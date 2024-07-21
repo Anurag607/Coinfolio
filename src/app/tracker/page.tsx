@@ -150,7 +150,7 @@ export default function Page() {
     return (
       <div className="fixed top-0 left-0 flex flex-col gap-4 items-center justify-center h-screen w-screen bg-zinc-800 bg-opacity-80 z-[100000] overflow-hidden">
         <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-white" />
-        <h4 className="text-white font-bold text-2xl mobile:w-[15rem] text-center">{`Getting Latest Crypto Currency Data...`}</h4>
+        <h4 className="text-white font-bold text-2xl mobile:w-[90vw] text-center">{`Getting Latest Crypto Currency Data...`}</h4>
       </div>
     );
   }

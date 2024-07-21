@@ -102,17 +102,19 @@ export default function RootLayout({ children }: { children: any }) {
                   <div
                     className={classNames({
                       "relative max-w-screen max-h-screen gap-x-0": true,
-                      "flex flex-row items-start justify-end": true,
+                      "flex flex-row items-start mobile:justify-center justify-end":
+                        true,
                     })}
                   >
                     <div
                       className={classNames({
                         [`relative h-screen ${
                           pathname === "/"
-                            ? "w-screen"
+                            ? "w-[97.5vw]"
                             : "w-[calc(100vw_-_3rem)]"
-                        } flex flex-col items-start justify-between`]: true,
-                        "mobile:w-screen overflow-hidden": true,
+                        } flex flex-col items-start justify-between mobile:items-center`]:
+                          true,
+                        "mobile:w-[90vw] overflow-hidden": true,
                       })}
                     >
                       <Navbar />

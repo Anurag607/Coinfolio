@@ -99,13 +99,13 @@ const NavSearch = () => {
       ref={navSearchRef}
       className={classNames({
         "relative flex items-center justify-center": true,
-        "lg:w-fit mr-1": true,
+        "w-full sm:w-fit mr-1": true,
       })}
       onClick={() => {
         setIsNavSearchOpen(!isNavSearchOpen);
       }}
     >
-      <div className="relative mt-1">
+      <div className="w-full relative mt-1">
         <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
           <svg
             className="w-5 h-5 text-gray-500 dark:text-gray-400"
@@ -126,7 +126,8 @@ const NavSearch = () => {
           id="table-search"
           autoComplete="off"
           className={classNames({
-            "block p-2 pl-10 w-full min-w-[30rem] bg-white": true, //display, padding, width and bg styling
+            "block p-2 pl-10 w-full sm:w-[15rem] md:w-[20rem] lg:w-[30rem] bg-white":
+              true, //display, padding, width and bg styling
             "text-sm text-neutral-800 outline-none": true, //text styling
             "border border-gray-300 rounded-lg": true, //border styling
             "focus:ring-2 focus:ring-neutral-700 focus:border-neutral-800":

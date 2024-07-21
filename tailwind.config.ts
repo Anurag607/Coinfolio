@@ -11,6 +11,10 @@ const config: Config = {
     extend: {
       screens: {
         xs: "350px",
+        "xs-max": {
+          max: "350px",
+        },
+        "min-mobile-sm": "475px",
         "mobile-sm": {
           max: "475px",
         },
