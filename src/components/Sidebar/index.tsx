@@ -42,7 +42,7 @@ const Sidebar = () => {
         "flex items-center justify-center z-[100001]": true,
         "bg-[#37352F] text-zinc-50": true,
         "fixed left-0 top-0": true,
-        [`h-screen ${!expanded ? "mobile:w-[3rem] w-[5rem]" : "w-screen"}`]:
+        [`h-screen ${!expanded ? "mobile:w-[4rem] w-[5rem]" : "w-screen"}`]:
           true,
         "transition-all ease-in-out": true,
         "bg-center bg-cover bg-no-repeat": true,
@@ -60,7 +60,7 @@ const Sidebar = () => {
       <div
         onClick={() => dispatch(isSidebarOpen ? closeSidebar() : openSidebar())}
         className={classNames({
-          "mobile:w-[30px] mobile:h-[30px] w-[42px] h-[42px] items-center justify-center":
+          "mobile:-translate-x-1 mobile:w-[30px] mobile:h-[30px] w-[42px] h-[42px] items-center justify-center":
             true,
           "bg-[#e8e8e8] text-neutral-700 rounded-lg left-[22px]": isSidebarOpen,
           "bg-red-500 text-[#F7F6F3] rounded-r-lg left-0": !isSidebarOpen,
@@ -89,7 +89,7 @@ const Sidebar = () => {
           className={classNames({
             "!bg-white !text-neutral-700": currentSection === 0,
             [`mobile:w-[30px] mobile:h-[30px] w-[42px] h-[42px] flex items-center justify-center ${
-              !expanded && "mobile:mt-1 mt-1"
+              !expanded && "mt-1"
             }`]: true,
             "bg-transparent border font-bold border-[#F7F6F3] text-[#F7F6F3] rounded-lg left-3":
               true,
@@ -109,7 +109,7 @@ const Sidebar = () => {
           className={classNames({
             "!bg-white !text-neutral-700": currentSection === 1,
             [`mobile:w-[30px] mobile:h-[30px] w-[42px] h-[42px] flex items-center justify-center ${
-              !expanded && "mobile:mt-1 mt-1"
+              !expanded && "mt-1"
             }`]: true,
             "bg-transparent border font-bold border-[#F7F6F3] text-[#F7F6F3] rounded-lg left-3":
               true,
@@ -129,7 +129,7 @@ const Sidebar = () => {
           className={classNames({
             "!bg-white !text-neutral-700": currentSection === 2,
             [`mobile:w-[30px] mobile:h-[30px] w-[42px] h-[42px] flex items-center justify-center ${
-              !expanded && "mobile:mt-1 mt-1"
+              !expanded && "mt-1"
             }`]: true,
             "bg-transparent border font-bold border-[#F7F6F3] text-[#F7F6F3] rounded-lg left-3":
               true,

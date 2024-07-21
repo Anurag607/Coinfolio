@@ -103,7 +103,7 @@ const Home = () => {
     >
       {/* Chart */}
       <div className="flex flex-col items-center justify-center gap-y-4 relative w-full rounded-md dark:!text-white py-4">
-        <div className="bound text-2xl font-medium mb-4 w-full relative text-neutral-700 dark:text-white">
+        <div className="bound mobile:text-xl text-2xl font-medium mb-4 w-full relative text-neutral-700 dark:text-white">
           <div className="flex items-center justify-start gap-x-3">
             {`Global Market Data`}
             {isLoadingHoldings ? (
@@ -160,7 +160,7 @@ const Home = () => {
         </div>
       </div>
       <div className="flex flex-col items-start justify-start w-full relative gap-y-3">
-        <div className="bound text-2xl font-medium mb-4 w-full relative text-neutral-700 dark:text-white">
+        <div className="bound mobile:text-xl text-2xl font-medium mb-4 w-full relative text-neutral-700 dark:text-white">
           <div className="flex items-center justify-start gap-x-3 ">
             {`Company Holdings`}
             {isLoadingHoldings ? (

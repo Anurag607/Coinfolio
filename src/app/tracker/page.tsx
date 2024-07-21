@@ -219,8 +219,8 @@ export default function Page() {
                   )}
                 </div>
               </div>
-              <div className="w-full relative flex flex-row flex-wrap items-start justify-center gap-4 mt-0">
-                <div className="w-[60%] h-fit relative flex">
+              <div className="w-full relative flex flex-col xl:flex-row items-start justify-center gap-4 mt-0">
+                <div className="w-full xl:w-[60%] h-fit relative flex">
                   <Table
                     type={"primary"}
                     page={page}
@@ -233,7 +233,7 @@ export default function Page() {
                     setPageData={setPageData}
                   />
                 </div>
-                <div className="w-[35%] h-fit flex flex-col items-center justify-center gap-y-4">
+                <div className="w-full xl:w-[35%] h-fit flex flex-col items-center justify-center gap-y-4">
                   <Table
                     type={"watchlist"}
                     page={page}

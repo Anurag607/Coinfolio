@@ -114,7 +114,7 @@ export default function RootLayout({ children }: { children: any }) {
                             : "w-[calc(100vw_-_3rem)]"
                         } flex flex-col items-start justify-between mobile:items-center`]:
                           true,
-                        "mobile:w-[90vw] overflow-hidden": true,
+                        "mobile:w-[90vw] xl:overflow-hidden": true,
                       })}
                     >
                       <Navbar />

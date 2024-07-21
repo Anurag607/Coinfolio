@@ -36,7 +36,7 @@ const Navbar = () => {
             onClick={() => dispatch(openSidebar())}
             className={classNames({
               [`${pathname === "/" ? "hidden" : "flex"}`]: true,
-              "mobile:hidden mobile:w-[32px] mobile:h-[32px] w-[42px] h-[42px] items-center justify-center":
+              "mobile:w-[32px] mobile:h-[32px] w-[42px] h-[42px] items-center justify-center":
                 true,
               [`${
                 !isSidebarOpen
@@ -51,7 +51,7 @@ const Navbar = () => {
           </div>
           <div
             onClick={() => router.push("/")}
-            className="w-fit h-fit flex justify-center items-center mobile:gap-1 gap-2 relative cursor-pointer"
+            className="mobile:ml-6 w-fit h-fit flex justify-center items-center mobile:gap-1 gap-2 relative cursor-pointer"
           >
             <Image
               src={`/cf_logo.svg`}
