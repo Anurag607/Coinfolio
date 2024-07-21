@@ -4,7 +4,7 @@ import { useDrag } from "react-dnd";
 const DraggableCoin = ({ coin, children, className }: any) => {
   const [{ isDragging }, drag] = useDrag(() => ({
     type: "COIN",
-    item: { coin },
+    item: { coin: coin },
     collect: (monitor) => ({
       isDragging: monitor.isDragging(),
     }),

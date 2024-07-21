@@ -44,10 +44,10 @@ const Table = ({
   const [loading, setLoading] = useState(false);
 
   const fetchData = async () => {
-    if (coinData.hasOwnProperty(page)) {
-      setPageData(coinData[page]);
-      return;
-    }
+    // if (coinData.hasOwnProperty(page)) {
+    //   setPageData(coinData[page]);
+    //   return;
+    // }
 
     setLoading(true);
 
@@ -301,7 +301,7 @@ const Table = ({
                       } px-4 py-2 bg-neutral-700 text-white rounded`}
                       onClick={(e) => {
                         e.preventDefault();
-                        setPage((prev: number) => Math.max(prev - 1, 1));
+                        setPage(Math.max(page - 1, 1));
                       }}
                       disabled={page === 1}
                     >
@@ -313,7 +313,7 @@ const Table = ({
                       } px-4 py-2 bg-neutral-700 text-white rounded`}
                       onClick={(e) => {
                         e.preventDefault();
-                        setPage((prev: number) => Math.min(prev + 1, 100));
+                        setPage(Math.min(page + 1, 100));
                       }}
                       disabled={page === 100}
                     >
