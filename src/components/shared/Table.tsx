@@ -37,28 +37,11 @@ const Table = ({
   setPageData: any;
 }) => {
   const dispatch = useAppDispatch();
-  const { searchParams } = useAppSelector((state: any) => state.searchBar);
   const { isSidebarOpen } = useAppSelector((state: any) => state.sidebar);
-  const {
-    coinData,
-    watchlist,
-    backupData,
-    sort_market_cap,
-    sort_current_price,
-  } = useAppSelector((state: any) => state.coins);
+  const { coinData, watchlist, sort_market_cap, sort_current_price } =
+    useAppSelector((state: any) => state.coins);
 
   const [loading, setLoading] = useState(false);
-
-  useEffect(() => {
-    if (!backupData.hasOwnProperty(page)) return;
-    let filteredData = backupData[page].filter((coin: any) => {
-      return coin.name.toLowerCase().includes(searchParams.toLowerCase());
-    });
-    if (searchParams === "") filteredData = backupData[page];
-    setPageData(filteredData);
-    setCoinData({ page, data: filteredData });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [searchParams]);
 
   const fetchData = async () => {
     if (coinData.hasOwnProperty(page)) {

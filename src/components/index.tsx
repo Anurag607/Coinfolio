@@ -16,7 +16,6 @@ export const Footer = dynamic(() => import("./Footer"), { ssr: true });
 export const Navbar = dynamic(() => import("./Navbar"), { ssr: true });
 export const Sidebar = dynamic(() => import("./Sidebar"), { ssr: true });
 export const Search = dynamic(() => import("./Search"), { ssr: true });
-export const Filter = dynamic(() => import("./Filter"), { ssr: true });
 export const LoadingSpinner = dynamic(() => import("./LoadingSpinner"), {
   ssr: true,
 });

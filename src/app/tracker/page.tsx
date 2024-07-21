@@ -8,12 +8,10 @@ import classNames from "classnames";
 import Image from "next/image";
 import { closeSidebar, openSidebar } from "@/redux/reducers/sidebarSlice";
 import useSwipe from "@/custom-hooks/useSwipe";
-import filterData from "@/scripts/filterScript";
 import {
   CategoryFetcher,
   CoinChartDataFetcher,
   CoinDetailFetcher,
-  CoinFetcher,
   CompanyFetcher,
   GlobalDataFetcher,
 } from "@/scripts/fetchScript";
@@ -22,8 +20,6 @@ import { ToastConfig } from "@/utils/config";
 import Table from "@/components/shared/Table";
 import {
   setCategoryData,
-  setCoinData,
-  setCoinList,
   setCurrentData,
   setGlobalData,
   setHoldingData,
@@ -45,7 +41,6 @@ export default function Page() {
     backupData,
   } = useAppSelector((state: any) => state.coins);
   const { searchParams } = useAppSelector((state: any) => state.searchBar);
-  const { filterValue } = useAppSelector((state: any) => state.filter);
   const [page, setPage] = useState(1);
   const [pageData, setPageData] = useState<any[]>([]);
 
@@ -91,12 +86,10 @@ export default function Page() {
   };
 
   const getCoinData = async () => {
-    // if (process.env.NEXT_PUBLIC_STATIC_API === "true") return;
+    if (process.env.NEXT_PUBLIC_STATIC_API === "true") return;
     setIsLoading(true);
 
     try {
-      const coins = await CoinFetcher(page);
-      dispatch(setCoinData({ page: 1, data: coins }));
       const categories = await CategoryFetcher();
       dispatch(setCategoryData(categories));
 
@@ -118,6 +111,19 @@ export default function Page() {
   }, [selectedCoin]);
 
   useEffect(() => {
+    let filteredData = coinData[page];
+
+    if (searchParams.length > 0) {
+      filteredData = filteredData.filter((coin: any) => {
+        return coin.name.toLowerCase().includes(searchParams.toLowerCase());
+      });
+    }
+
+    setPageData(filteredData);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchParams]);
+
+  useEffect(() => {
     setPage(1);
     dispatch(setCurrentData({ currentDataId: "All Coins", data: [] }));
     dispatch(setSelectedCoin("bitcoin"));
@@ -125,23 +131,6 @@ export default function Page() {
     getCoinData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  useEffect(() => {
-    const isSearchEmpty = () => searchParams.length === 0;
-    const isFilterEmpty = () => filterValue.length === 0;
-    const isClear = () => isSearchEmpty() && isFilterEmpty();
-
-    if (isClear()) {
-      return;
-    }
-    filterData(
-      isFilterEmpty() ? backupData : coinData,
-      searchParams,
-      filterValue,
-      dispatch
-    );
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [filterValue, searchParams]);
 
   const CoinDataLists: { [key: string]: any } = {
     "All Coins": coinData,

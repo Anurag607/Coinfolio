@@ -4,14 +4,19 @@ import Link from "next/link";
 import classNames from "classnames";
 import { CaretRightFilled } from "@ant-design/icons";
 import { useEffect } from "react";
+import { usePathname } from "next/navigation";
 
 const heading = "Where Crypto Management Meets Simplicity";
 const subHeading = "Your Comprehensive Tool for Cryptocurrency Management";
 
 const Home = () => {
+  const pathname = usePathname();
+
   useEffect(() => {
+    if (pathname !== "/") return;
     localStorage.removeItem("persist:root");
-  }, []);
+    console.clear();
+  }, [pathname]);
 
   return (
     <main

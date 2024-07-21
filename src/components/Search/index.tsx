@@ -8,12 +8,12 @@ import { updateRecentlySearched } from "@/redux/reducers/coinSlice";
 const Search = () => {
   const searchRef = useRef(null);
   const dispatch = useAppDispatch();
-  const [search, setSearch] = useState("");
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const { recentlysearched } = useAppSelector((state: any) => state.coins);
+  const { searchParams } = useAppSelector((state: any) => state.searchBar);
 
   useOnClickOutside(searchRef, () => {
-    dispatch(updateRecentlySearched(search));
+    dispatch(updateRecentlySearched(searchParams));
     setIsSearchOpen(false);
   });
 
@@ -23,9 +23,6 @@ const Search = () => {
         "relative flex items-center justify-center": true,
         "lg:w-fit mr-1": true,
       })}
-      onClick={() => {
-        setIsSearchOpen(!isSearchOpen);
-      }}
     >
       <div className="relative mt-1">
         <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
@@ -59,11 +56,16 @@ const Search = () => {
             "cursor-text": true,
           })}
           placeholder="Search for Coins"
-          value={search}
+          value={searchParams}
           onChange={(e) => {
             let searchText = e.currentTarget.value;
-            setSearch(searchText);
-            dispatch(setSearchParams(search));
+            dispatch(setSearchParams(searchText));
+
+            if (searchText.length > 0) {
+              setIsSearchOpen(true);
+            } else {
+              setIsSearchOpen(false);
+            }
           }}
         />
         <div
