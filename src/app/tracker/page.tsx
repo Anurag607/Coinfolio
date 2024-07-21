@@ -57,8 +57,7 @@ export default function Page() {
     },
   });
 
-  const RefereshCoinDetails = () => {
-    setIsFetching(true);
+  const RefereshCoinDetails = async () => {
     CoinChartDataFetcher(selectedCoin)
       .then((res) => {
         if (res.hasOwnProperty("prices")) {
@@ -72,10 +71,10 @@ export default function Page() {
               }
             })
             .catch((err) => {
-              toast.error(
-                `Failed to fetch data (CoinDetail-API-${err})`,
-                ToastConfig
-              );
+              // toast.error(
+              //   `Failed to fetch data (CoinDetail-API-${err})`,
+              //   ToastConfig
+              // );
               setIsFetching(false);
             });
           setIsFetching(false);
@@ -84,7 +83,7 @@ export default function Page() {
         }
       })
       .catch((err) => {
-        toast.error(`Failed to fetch data (Chart-API-${err})`, ToastConfig);
+        // toast.error(`Failed to fetch data (Chart-API-${err})`, ToastConfig);
         setIsFetching(false);
       });
   };
