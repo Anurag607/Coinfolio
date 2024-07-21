@@ -208,7 +208,7 @@ const Home = () => {
             })}
           </div>
         </div>
-        <HomeTable data={holdingData} />
+        {typeof holdingData !== "undefined" && <HomeTable data={holdingData} />}
         <div className={"w-full h-[8rem] bg-transparent"} />
       </div>
     </div>

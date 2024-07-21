@@ -90,7 +90,7 @@ export default function Page() {
   };
 
   const getCoinData = async () => {
-    if (process.env.NEXT_PUBLIC_STATIC_API === "true") return;
+    // if (process.env.NEXT_PUBLIC_STATIC_API === "true") return;
     setIsLoading(true);
 
     try {
